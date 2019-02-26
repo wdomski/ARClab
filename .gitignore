@@ -1,0 +1,6 @@
+
+#excluded files for Matlab
+
+3RMatlab/modelODEfull.m
+3RMatlab/effectorTrajectoryGenerator3Dfull.m
+*.asv
