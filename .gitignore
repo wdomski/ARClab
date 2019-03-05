@@ -4,3 +4,7 @@
 3RMatlab/modelODEfull.m
 3RMatlab/effectorTrajectoryGenerator3Dfull.m
 *.asv
+
+# Atollic TrueSTUDIO temporary files adn directories
+
+Debug
