@@ -16,4 +16,6 @@ The goal of this class it to implement input-output decoupling for
 this object. The simulation is run using ODE solver instead of a 
 Simulink diagram.
 
-
+- **GPIO** contains two exercises for STM32 MCU. Those 
+exercises involve GPIO manipulation using a button to read 
+data from digital input, and a LED to write digital output.
