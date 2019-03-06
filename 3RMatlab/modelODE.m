@@ -2,10 +2,10 @@ function [ output_args, additional ] = modelODE( t, input_args, parameters )
     
     %get input values
 
-    %manipulator joint position
+    %manipulator joint velocities
         qr_d1 = input_args(1:3);
         q_d1 = qr_d1;
-    %manipulator joint velocities
+    %manipulator joint position
         qr = input_args(4:6); 
         q = qr;
 
