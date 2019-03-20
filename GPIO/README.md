@@ -77,6 +77,8 @@ In [UM1884] detailed description of HAL API and LL API can be found.
 Information about automatic code generation using STM32CubeMX software 
 can be found in [UM1718].
 
+Mentioned files can be found at [st.com](https://www.st.com) or at [edu.domski.pl](https://edu.domski.pl/kursy/advanced-robot-control/arc-laboratory/)
+
 # Literature
 
 - [STM32L476xx] ST, Ultra-low-power Arm® Cortex®-M4 32-bit MCU+FPU, 100DMIPS, up to 1MB Flash, 128 KB SRAM, USB OTG FS, LCD, ext. SMPS, STM32L476xx, Datasheet, 2018.
