@@ -6,6 +6,8 @@
 3RMatlab/startFull.m
 *.asv
 
-# Atollic TrueSTUDIO temporary files adn directories
+# Atollic TrueSTUDIO temporary files and directories
 
 Debug
+mainfull.c
+*.bak 
