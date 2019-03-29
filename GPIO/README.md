@@ -40,25 +40,41 @@ a LED diode wil change its state (turned on or off).
 
 Create a project or use an existing one (**GPIO_ex1** or **GPIO_ex2**)
 to write a program which will read digital input state (button) 
-and toggle LED every time when a button is pressed. Use 
-debouncing procedure if necessary.
+and toggle LED every time when a button is pressed. 
+
+Implement debouncing procedure. This procedure should 
+not introduce any delay to the system (busy waits, etc.) 
+but should be time dependent. 
+
+The application should work as follows.
+When a button is pressed it immediately changes current 
+state of the LED. During hold and after release the LED 
+state should not change.
+
 
 # Useful functions
 
-Reading digitial input state
+Reading digital input state
 - HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
 
 Toggling digital output state
 - HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
 
-Delay measured in [mn] (busy wait)
+Delay measured in [ms] (busy wait)
 - HAL_Delay(1000);
+
+Get current number of ticks measured since 
+MCU start (in this exercise 1 tick = 1 [ms])
+- HAL_GetTick();
 
 Setting digital output to low/high
 - HAL_GPIO_WritePin( LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
 - HAL_GPIO_WritePin( LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
 
-Redirection of printf() function output to serial port
+Redirection of printf() function output to serial port 
+can be done with redefinition of _write() function.
+Also include **stdio.h**.
+
 ```
 int _write(int file, char *ptr, int len) {
 	HAL_UART_Transmit(&huart2, (uint8_t *) ptr, len, 50);
