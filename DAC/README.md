@@ -63,6 +63,14 @@ trigger ADC measurement in interrupt mode),
 of the application,
 - initialize TIM in time base mode with interrupts.
 
+## Data visualization
+
+Use STMStudio software to visualize the measured value.
+Open STMStudio and import variables from executable (*.elf file).
+Start recording session. Remember to disconnect from ST-Link Utility 
+and terminate any open debug session in Atollic TrueSTUDIO.
+More information about STMStudio can be found in [UM1025].
+
 
 # Useful functions
 
