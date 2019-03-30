@@ -86,6 +86,8 @@ In [UM1884] detailed description of HAL API and LL API can be found.
 Information about automatic code generation using STM32CubeMX software 
 can be found in [UM1718].
 
+User manual for STM Studio software can be found in [UM1025].
+
 Mentioned files can be found at [st.com](https://www.st.com) or at [edu.domski.pl](https://edu.domski.pl/kursy/advanced-robot-control/arc-laboratory/)
 
 # Literature
@@ -100,6 +102,7 @@ Mentioned files can be found at [st.com](https://www.st.com) or at [edu.domski.p
 
 - [RM0351] ST, STM32L4x5 and STM32L4x6 advanced Arm®-based 32-bit MCUs, Reference manual, RM0351, 2018.
 
+- [UM1025] ST, Getting started with STM-STUDIO, User manual, UM1025, 2013.
 
 
 
