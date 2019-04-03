@@ -21,7 +21,7 @@ Corresponding callback function is called then called.
 To imitate analog signal digital signal from blue pushbutton 
 is connected to the analog input.
 
-Below you can see example of an output:
+Below you can see an example of an output:
 ```
 Measured value = 4031
 Measured value = 0
@@ -63,11 +63,68 @@ In this task you have to fill out following gaps:
 communication flow,
 - introduce periodical flow of measurement.
 
+# Task 2
+
+Import **ADC_ex2** project into Atollic TrueSTUDIO.
+The aim of this exercise is to show how to implement tasks in 
+FreeRTOS. The exercise involves:
+- periodic task creation,
+- starting FreeRTOS scheduler, 
+- communication between tasks using mutexes.
+
+The ADC1 is configured in such a way that the 
+conversion is triggered by TIM6. It is required to 
+start a timer TIM6 in time base mode with interrupts 
+and start ADC1 peripheral (without interrupts or DMA).
+
+There should be created two tasks:
+- **measure**, a task responsible for reading measurements 
+from ADC and storing it in memory. This task 
+should be a periodic one with period equal to 1000 [ms],
+- **comm** prints measured value via serial ports 
+and determines if a button was pushed or not. This task 
+should be a periodic one with period equal to 1000 [ms].
+
+In this excercise you have to fill out following gaps:
+- include all necessary headers **stdio.h**, **FreeRTOS.h**,
+**task.h**, **semphr.h** (in this order),
+- start TIM6 in time base mode with interrupts,
+- start ADC1,
+- create a mutex,
+- create two tasks described above,
+- start FreeRTOS scheduler,
+- implement printf() redirection to serial port,
+- implement **measure** task as a periodic one,
+- implement **comm** task as a periodic one.
+
+Below you can see an example of an output:
+```
+4029, released
+4035, released
+4031, released
+4031, released
+0, pushed
+0, pushed
+4031, released
+0, pushed
+0, pushed
+4029, released
+4029, released
+```
+
+More information about FreeRTOS can be found in [FreeRTOSMastering] 
+and [FreeRTOSManual].
 
 # Useful functions
 
 Start ADC conversion in interrupt mode.
 - HAL_ADC_Start_IT(&hadc1);
+
+Start ADC.
+- HAL_ADC_Start(&hadc1);
+
+Start TIM in time base mode with interrupts:
+- HAL_TIM_Base_Start_IT(&htim6);
 
 Callback function called when the ADC measurement is ready.
 - void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc);
@@ -90,30 +147,38 @@ int _write(int file, char *ptr, int len) {
 }
 ```
 
-# Additional materials
+## FreeRTOS related
 
-Description of the development board can be found in [UM1724], 
-while the information about the MCU at this board can be found in [STM32L476xx]. 
-The detailed description of the STM32L4x5 and STM32L4x6 MCUs along 
-with its registers description is in [RM0351].
+Create mutex. This function returns a mutex:
+- xSemaphoreCreateMutex();
 
-In [UM1884] detailed description of HAL API and LL API can be found. 
-Information about automatic code generation using STM32CubeMX software 
-can be found in [UM1718].
+Create a task **example** with  **exampleTask** function which 
+implements the task:
+- xTaskCreate(exampleTask, "example", configMINIMAL_STACK_SIZE * 4, NULL, 3, NULL);
 
-Mentioned files can be found at [st.com](https://www.st.com) or at [edu.domski.pl](https://edu.domski.pl/kursy/advanced-robot-control/arc-laboratory/)
+Start scheduler:
+- vTaskStartScheduler();
 
-# Literature
+General look of a task:
+```
+void exampleTask(void * args) {
 
-- [STM32L476xx] ST, Ultra-low-power Arm® Cortex®-M4 32-bit MCU+FPU, 100DMIPS, up to 1MB Flash, 128 KB SRAM, USB OTG FS, LCD, ext. SMPS, STM32L476xx, Datasheet, 2018.
+	for (;;) {
 
-- [UM1884] ST, Description of STM32L4/L4+ HAL and low-layer drivers, User manual, UM1884, 2017.
+	}
+}
+```
 
-- [UM1724] ST, STM32 Nucleo-64 boards, User manual, UM1724, 2017.
-
-- [UM1718] ST, STM32CubeMX for STM32 configuration and initialization C code generation, User Manual, UM1718, 2019.
-
-- [RM0351] ST, STM32L4x5 and STM32L4x6 advanced Arm®-based 32-bit MCUs, Reference manual, RM0351, 2018.
-
+General look of a periodic task with period of 100 [ms]:
+```
+void exampleTask(void * args) {
+	TickType_t xLastWakeTime;
+	xLastWakeTime = xTaskGetTickCount();
+	
+	for (;;) {
+		vTaskDelayUntil(&xLastWakeTime, pdMS_TO_TICKS(100));
+	}
+}
+```
 
 
