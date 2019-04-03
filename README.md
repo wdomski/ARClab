@@ -55,6 +55,13 @@ Exercise from **ADC**, task 1.
 
 Exercise from **DAC**, task 1.
 
+## Laboratory 5
+
+Introduction to FreeRTOS. Basic concepts, task 
+and task synchronisation.
+
+Exercise from **ADC**, task 2.
+
 # Troubleshooting
 
 - If the Atollic TrueSTUDIO displays a message that 
