@@ -20,11 +20,18 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+// --> include all necessary headers for
+// printf() redirection
+// FreeRTOS related headers
+
 
 /* USER CODE END Includes */
 
@@ -58,6 +65,23 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+uint16_t measurement;
+SemaphoreHandle_t mutex;
+
+void measureTask(void * args) {
+
+	for (;;) {
+
+	}
+}
+
+void commTask(void * args) {
+
+	for (;;) {
+
+	}
+}
+
 /* USER CODE END 0 */
 
 /**
@@ -88,7 +112,23 @@ int main(void) {
 	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
 	MX_USART2_UART_Init();
+	MX_ADC1_Init();
+	MX_TIM6_Init();
 	/* USER CODE BEGIN 2 */
+
+	// --> start TIM6 in interrupt
+
+	// --> start ADC1
+
+
+	// --> create a mutex
+
+
+	// --> create all necessary tasks
+
+	printf("Starting!\r\n");
+
+	// --> start FreeRTOS scheduler
 
 	/* USER CODE END 2 */
 
@@ -138,8 +178,17 @@ void SystemClock_Config(void) {
 	if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_4) != HAL_OK) {
 		Error_Handler();
 	}
-	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2;
+	PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART2
+			| RCC_PERIPHCLK_ADC;
 	PeriphClkInit.Usart2ClockSelection = RCC_USART2CLKSOURCE_PCLK1;
+	PeriphClkInit.AdcClockSelection = RCC_ADCCLKSOURCE_PLLSAI1;
+	PeriphClkInit.PLLSAI1.PLLSAI1Source = RCC_PLLSOURCE_HSI;
+	PeriphClkInit.PLLSAI1.PLLSAI1M = 1;
+	PeriphClkInit.PLLSAI1.PLLSAI1N = 8;
+	PeriphClkInit.PLLSAI1.PLLSAI1P = RCC_PLLP_DIV7;
+	PeriphClkInit.PLLSAI1.PLLSAI1Q = RCC_PLLQ_DIV2;
+	PeriphClkInit.PLLSAI1.PLLSAI1R = RCC_PLLR_DIV2;
+	PeriphClkInit.PLLSAI1.PLLSAI1ClockOut = RCC_PLLSAI1_ADC1CLK;
 	if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK) {
 		Error_Handler();
 	}

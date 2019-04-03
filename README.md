@@ -95,6 +95,9 @@ can be found in [UM1718].
 
 User manual for STM Studio software can be found in [UM1025].
 
+More information about FreeRTOS can be found in [FreeRTOSMastering].
+Details about API of FreeRTOS can be found in [FreeRTOSManual].
+
 Mentioned files can be found at [st.com](https://www.st.com) or at [edu.domski.pl](https://edu.domski.pl/kursy/advanced-robot-control/arc-laboratory/)
 
 # Literature
@@ -111,8 +114,9 @@ Mentioned files can be found at [st.com](https://www.st.com) or at [edu.domski.p
 
 - [UM1025] ST, Getting started with STM-STUDIO, User manual, UM1025, 2013.
 
+- [FreeRTOSMastering] R. Barry, Mastering the FreeRTOS™ Real Time Kernel, Real Time Engineers Ltd., 2016.
 
-
+- [FreeRTOSManual] Amazon Web Services, The FreeRTOS™ Reference Manual, API Functions and Configuration Options, Amazon.com Inc., 2017.
 
 
 
