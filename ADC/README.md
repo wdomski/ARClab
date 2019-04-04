@@ -119,7 +119,7 @@ In this exercise do not implement FreeRTOS tasks.
 
 ## Subtask 2
 
-Subtask 2 is extension to subtask 1 where FreeRTOS 
+Subtask 2 is an extension to subtask 1 where FreeRTOS 
 capabilities are used.
 
 In this exercise you have to fill out following gaps:
