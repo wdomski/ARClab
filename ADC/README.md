@@ -72,6 +72,8 @@ FreeRTOS. The exercise involves:
 - starting FreeRTOS scheduler, 
 - communication between tasks using mutexes.
 
+**This exercise contains two subexercises.**
+
 The ADC1 is configured in such a way that the 
 conversion is triggered by TIM6. It is required to 
 start a timer TIM6 in time base mode with interrupts 
@@ -85,17 +87,7 @@ should be a periodic one with period equal to 1000 [ms],
 and determines if a button was pushed or not. This task 
 should be a periodic one with period equal to 1000 [ms].
 
-In this excercise you have to fill out following gaps:
-- include all necessary headers **stdio.h**, **FreeRTOS.h**,
-**task.h**, **semphr.h** (in this order),
-- start TIM6 in time base mode with interrupts,
-- start ADC1,
-- create a mutex,
-- create two tasks described above,
-- start FreeRTOS scheduler,
-- implement printf() redirection to serial port,
-- implement **measure** task as a periodic one,
-- implement **comm** task as a periodic one.
+
 
 Below you can see an example of an output:
 ```
@@ -114,6 +106,33 @@ Below you can see an example of an output:
 
 More information about FreeRTOS can be found in [FreeRTOSMastering] 
 and [FreeRTOSManual].
+
+## Subtask 1
+
+In this exercise you have to fill out following gaps:
+- include all necessary headers **stdio.h**,
+- start TIM6 in time base mode with interrupts,
+- start ADC1,
+- write code that will read measured data from ADC periodically.
+
+In this exercise do not implement FreeRTOS tasks.
+
+## Subtask 2
+
+Subtask 2 is extension to subtask 1 where FreeRTOS 
+capabilities are used.
+
+In this exercise you have to fill out following gaps:
+- include all necessary headers **stdio.h**, **FreeRTOS.h**,
+**task.h**, **semphr.h** (in this order),
+- start TIM6 in time base mode with interrupts,
+- start ADC1,
+- create a mutex,
+- create two tasks described above,
+- start FreeRTOS scheduler,
+- implement printf() redirection to serial port,
+- implement **measure** task as a periodic one,
+- implement **comm** task as a periodic one.
 
 # Useful functions
 
