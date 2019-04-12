@@ -70,7 +70,16 @@ The aim of this exercise is to show how to implement tasks in
 FreeRTOS. The exercise involves:
 - periodic task creation,
 - starting FreeRTOS scheduler, 
-- communication between tasks using mutexes.
+- communication between tasks using mutexes,
+- communication using events via Event Groups.
+
+You have to connect two pins with a wire. Pin PA0 (analog input) 
+and PC13 (blue button). Connect those two ports 
+while the dev board is not connected to power!
+Use the leaflet given out during classes to identify the 
+MCU pins.
+Before proceeding further inform teacher about the connection 
+and ask for permission to proceed further.
 
 **This exercise contains three subexercises.**
 
