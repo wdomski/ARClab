@@ -9,5 +9,5 @@
 # Atollic TrueSTUDIO temporary files and directories
 
 Debug
-mainfull.c
+mainfull*.c
 *.bak 
