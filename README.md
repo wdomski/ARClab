@@ -58,9 +58,10 @@ Exercise from **DAC**, task 1.
 ## Laboratory 5
 
 Introduction to FreeRTOS. Basic concepts, task 
-and task synchronisation.
+and task synchronisation with mutexes and 
+Event Groups.
 
-Exercise from **ADC**, task 2.
+Exercises from **ADC**, task 2 (subtask 1, 2 & 3).
 
 # Troubleshooting
 

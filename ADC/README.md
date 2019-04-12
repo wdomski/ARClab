@@ -72,7 +72,7 @@ FreeRTOS. The exercise involves:
 - starting FreeRTOS scheduler, 
 - communication between tasks using mutexes.
 
-**This exercise contains two subexercises.**
+**This exercise contains three subexercises.**
 
 The ADC1 is configured in such a way that the 
 conversion is triggered by TIM6. It is required to 
@@ -87,7 +87,18 @@ should be a periodic one with period equal to 1000 [ms],
 and determines if a button was pushed or not. This task 
 should be a periodic one with period equal to 1000 [ms].
 
+More information about FreeRTOS can be found in [FreeRTOSMastering] 
+and [FreeRTOSManual].
 
+## Subtask 1
+
+In this exercise you have to fill out following gaps:
+- include all necessary headers **stdio.h**,
+- start TIM6 in time base mode with interrupts,
+- start ADC1,
+- write code that will read measured data from ADC periodically.
+
+**In this exercise do not implement FreeRTOS tasks.**
 
 Below you can see an example of an output:
 ```
@@ -104,19 +115,6 @@ Below you can see an example of an output:
 4029, released
 ```
 
-More information about FreeRTOS can be found in [FreeRTOSMastering] 
-and [FreeRTOSManual].
-
-## Subtask 1
-
-In this exercise you have to fill out following gaps:
-- include all necessary headers **stdio.h**,
-- start TIM6 in time base mode with interrupts,
-- start ADC1,
-- write code that will read measured data from ADC periodically.
-
-In this exercise do not implement FreeRTOS tasks.
-
 ## Subtask 2
 
 Subtask 2 is an extension to subtask 1 where FreeRTOS 
@@ -131,8 +129,66 @@ In this exercise you have to fill out following gaps:
 - create two tasks described above,
 - start FreeRTOS scheduler,
 - implement printf() redirection to serial port,
-- implement **measure** task as a periodic one,
-- implement **comm** task as a periodic one.
+- implement **measure** task as a periodic one, period = 1000 [ms],
+- implement **comm** task as a periodic one, period = 1000 [ms].
+
+Below you can see an example of an output:
+```
+4036, released
+4030, released
+4031, released
+4036, released
+0, pushed
+0, pushed
+4024, released
+4031, released
+4031, released
+0, pushed
+4031, released
+4030, released
+```
+
+## Subtask 3
+
+Subtask 3 is a modification of Subtask 2 where 
+instead of periodically calling **comm** task an 
+event group is used instead. The **comm** task 
+should be only waked up when the measurement is 
+ready to process.
+
+Find proper API for handling Event Groups in [FreeRTOSManual].
+
+In this exercise you have to fill out following gaps:
+- include **event_groups.h** header file,
+- create global variable for holding Event Group,
+- create Event Group,
+- in **measure** task set a flag (bit 0) in Event group,
+- in **comm** task use appropriate API for waiting for 
+an event. **Wait only for 400 [ms]**,
+- make additional appropriate alterations to the code.
+
+Below you can see an example of an output:
+```
+4029, released
+no event
+no event
+4031, released
+no event
+no event
+4031, released
+no event
+no event
+4031, released
+no event
+no event
+0, pushed
+no event
+no event
+4031, released
+no event
+no event
+Below you can see an example of an output:
+```
 
 # Useful functions
 
