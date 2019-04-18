@@ -139,7 +139,9 @@ In this exercise you have to fill out following gaps:
 - start FreeRTOS scheduler,
 - implement printf() redirection to serial port,
 - implement **measure** task as a periodic one, period = 1000 [ms],
-- implement **comm** task as a periodic one, period = 1000 [ms].
+- implement **comm** task as a periodic one, period = 1000 [ms],
+- implement *proper* communication between **measure** and **comm** 
+using created mutex.
 
 Below you can see an example of an output:
 ```
