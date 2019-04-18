@@ -86,15 +86,15 @@ and ask for permission to proceed further.
 The ADC1 is configured in such a way that the 
 conversion is triggered by TIM6. It is required to 
 start a timer TIM6 in time base mode with interrupts 
-and start ADC1 peripheral (without interrupts or DMA).
+and start ADC1 peripheral in DMA mode. This configuration 
+allow for completely CPU-free periodic measurement of 
+analog signal.
 
 There should be created two tasks:
 - **measure**, a task responsible for reading measurements 
-from ADC and storing it in memory. This task 
-should be a periodic one with period equal to 1000 [ms],
+from ADC and storing it in memory. 
 - **comm** prints measured value via serial ports 
-and determines if a button was pushed or not. This task 
-should be a periodic one with period equal to 1000 [ms].
+and determines if a button was pushed or not. 
 
 More information about FreeRTOS can be found in [FreeRTOSMastering] 
 and [FreeRTOSManual].
@@ -104,24 +104,25 @@ and [FreeRTOSManual].
 In this exercise you have to fill out following gaps:
 - include all necessary headers **stdio.h**,
 - start TIM6 in time base mode with interrupts,
-- start ADC1,
-- write code that will read measured data from ADC periodically.
+- start ADC1 in DMA mode,
+- write code that will print measured data periodically, 
+period should be equal to 1000 [ms].
 
 **In this exercise do not implement FreeRTOS tasks.**
 
 Below you can see an example of an output:
 ```
-4029, released
-4035, released
-4031, released
-4031, released
-0, pushed
-0, pushed
-4031, released
-0, pushed
-0, pushed
-4029, released
-4029, released
+Measured 4029
+Measured 4035
+Measured 4031
+Measured 4031
+Measured 0
+Measured 0
+Measured 4031
+Measured 0
+Measured 0
+Measured 4029
+Measured 4029
 ```
 
 ## Subtask 2
@@ -129,77 +130,123 @@ Below you can see an example of an output:
 Subtask 2 is an extension to subtask 1 where FreeRTOS 
 capabilities are used.
 
+The aim of this exercise is to implement a queue 
+of size equal to 15 samples of uint16_t. 
+Two tasks should be created **measure** and **comm**.
+Task **measure** should be made periodical with period 
+equal to 300 [ms] (not ticks).
+Task **comm** should be also periodical but depending 
+on the number of items inside the queue it should change.
+If there are more than 12 samples the **comm** task 
+should have period equal to 100 [ms] while 
+the queue has less than 4 items inside the period should 
+be equal to 500 [ms]. This feature should be implemented 
+as a hysteresis. In other words, if the queue is almost 
+empty items should be pulled slowly while 
+the queue is almost full the items should be pulled 
+quickly.
+
 In this exercise you have to fill out following gaps:
 - include all necessary headers **stdio.h**, **FreeRTOS.h**,
-**task.h**, **semphr.h** (in this order),
+**task.h**, **semphr.h**, **queue.h** (in this order),
 - start TIM6 in time base mode with interrupts,
-- start ADC1,
-- create a mutex,
+- start ADC1 in DMA mode,
+- create a mutex to share a **flag** variable between tasks,
+- create a queue (15 samples of uint16_t),
 - create two tasks described above,
 - start FreeRTOS scheduler,
 - implement printf() redirection to serial port,
 - implement **measure** task as a periodic one, period = 1000 [ms],
 - implement **comm** task as a periodic one, period = 1000 [ms],
 - implement *proper* communication between **measure** and **comm** 
-using created mutex.
+using created mutex and queue.
+
+Three values should be printed via **comm** task:
+- current time expressed in ticks,
+- ADC value,
+- queue size,
+- error (flag).
+
+Flag can be assigned with four values (QueueStatus):
+- QueueOK (0) when a item was successfully sent to queue,
+- QueueWriteProblem (1) when there was a problem during sending 
+an item to the queue,
+- QueueEmpty (2) queue was empty,
+- QueueCantRead (3) an item could not be received from 
+the queue.
+
+Discover each state of the queue and print corresponding 
+information.
 
 Below you can see an example of an output:
 ```
-4036, released
-4030, released
-4031, released
-4036, released
-0, pushed
-0, pushed
-4024, released
-4031, released
-4031, released
-0, pushed
-4031, released
-4030, released
+Starting!
+time: 0, measured value: 0, queue size 0, error 2
+time: 500, measured value: 0, queue size 2, error 0
+time: 1000, measured value: 0, queue size 3, error 0
+time: 1500, measured value: 0, queue size 3, error 0
+time: 2000, measured value: 0, queue size 4, error 0
+time: 2500, measured value: 4035, queue size 5, error 0
+time: 3000, measured value: 4035, queue size 5, error 0
+time: 3500, measured value: 4035, queue size 6, error 0
+time: 4000, measured value: 4036, queue size 7, error 0
+time: 4500, measured value: 4036, queue size 7, error 0
+time: 5000, measured value: 4036, queue size 8, error 0
+time: 5500, measured value: 4036, queue size 9, error 0
+time: 6000, measured value: 4036, queue size 9, error 0
+time: 6500, measured value: 4036, queue size 10, error 0
+time: 7000, measured value: 4036, queue size 11, error 0
+time: 7500, measured value: 4035, queue size 11, error 0
+time: 8000, measured value: 4035, queue size 12, error 0
+time: 8500, measured value: 4035, queue size 13, error 0
+time: 8600, measured value: 4035, queue size 12, error 0
+time: 8700, measured value: 4035, queue size 11, error 0
+time: 8800, measured value: 4035, queue size 11, error 0
+time: 8900, measured value: 4036, queue size 10, error 0
+time: 9000, measured value: 4036, queue size 9, error 0
+time: 9100, measured value: 4036, queue size 9, error 0
+time: 9200, measured value: 4036, queue size 8, error 0
+time: 9300, measured value: 4035, queue size 7, error 0
+time: 9400, measured value: 4035, queue size 7, error 0
+time: 9500, measured value: 4035, queue size 6, error 0
+time: 9600, measured value: 4035, queue size 5, error 0
+time: 9700, measured value: 4035, queue size 5, error 0
+time: 9800, measured value: 4035, queue size 4, error 0
+time: 9900, measured value: 4037, queue size 3, error 0
+time: 10400, measured value: 4037, queue size 4, error 0
+time: 10900, measured value: 4037, queue size 5, error 0
+time: 11400, measured value: 4037, queue size 5, error 0
+time: 11900, measured value: 4035, queue size 6, error 0
+time: 12400, measured value: 4035, queue size 7, error 0
+time: 12900, measured value: 4035, queue size 7, error 0
+time: 13400, measured value: 4035, queue size 8, error 0
+time: 13900, measured value: 4035, queue size 9, error 0
+time: 14400, measured value: 4035, queue size 9, error 0
+time: 14900, measured value: 4035, queue size 10, error 0
+time: 15400, measured value: 4035, queue size 11, error 0
+time: 15900, measured value: 4035, queue size 11, error 0
+time: 16400, measured value: 4035, queue size 12, error 0
+time: 16900, measured value: 4035, queue size 13, error 0
+time: 17000, measured value: 4035, queue size 12, error 0
+time: 17100, measured value: 4035, queue size 11, error 0
+time: 17200, measured value: 4035, queue size 11, error 0
+time: 17300, measured value: 4035, queue size 10, error 0
+time: 17400, measured value: 4035, queue size 9, error 0
+time: 17500, measured value: 4035, queue size 9, error 0
+time: 17600, measured value: 4035, queue size 8, error 0
+time: 17700, measured value: 4035, queue size 7, error 0
+time: 17800, measured value: 4035, queue size 7, error 0
+time: 17900, measured value: 4035, queue size 6, error 0
+time: 18000, measured value: 4035, queue size 5, error 0
+time: 18100, measured value: 4035, queue size 5, error 0
+time: 18200, measured value: 4035, queue size 4, error 0
+time: 18300, measured value: 4035, queue size 3, error 0
+time: 18800, measured value: 4035, queue size 4, error 0
 ```
 
 ## Subtask 3
 
-Subtask 3 is a modification of Subtask 2 where 
-instead of periodically calling **comm** task an 
-event group is used instead. The **comm** task 
-should be only waked up when the measurement is 
-ready to process.
-
-Find proper API for handling Event Groups in [FreeRTOSManual].
-
-In this exercise you have to fill out following gaps:
-- include **event_groups.h** header file,
-- create global variable for holding Event Group,
-- create Event Group,
-- in **measure** task set a flag (bit 0) in Event group,
-- in **comm** task use appropriate API for waiting for 
-an event. **Wait only for 400 [ms]**,
-- make additional appropriate alterations to the code.
-
-Below you can see an example of an output:
-```
-4029, released
-no event
-no event
-4031, released
-no event
-no event
-4031, released
-no event
-no event
-4031, released
-no event
-no event
-0, pushed
-no event
-no event
-4031, released
-no event
-no event
-Below you can see an example of an output:
-```
+TBA
 
 # Useful functions
 
@@ -208,6 +255,10 @@ Start ADC conversion in interrupt mode.
 
 Start ADC.
 - HAL_ADC_Start(&hadc1);
+
+Start ADC in DMA mode, measurement treated as buffer 
+of length equal to 1 sample.
+- HAL_ADC_Start_DMA(&hadc1, (uint32_t *) &measurement, 1);
 
 Start TIM in time base mode with interrupts:
 - HAL_TIM_Base_Start_IT(&htim6);
@@ -235,8 +286,11 @@ int _write(int file, char *ptr, int len) {
 
 ## FreeRTOS related
 
-Create mutex. This function returns a mutex:
+Create a mutex. This function returns a mutex:
 - xSemaphoreCreateMutex();
+
+Create a queue:
+- xQueueCreate(numberOfItems, sizeOfItem);
 
 Create a task **example** with  **exampleTask** function which 
 implements the task:
