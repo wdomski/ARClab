@@ -151,13 +151,13 @@ In this exercise you have to fill out following gaps:
 **task.h**, **semphr.h**, **queue.h** (in this order),
 - start TIM6 in time base mode with interrupts,
 - start ADC1 in DMA mode,
-- create a mutex to share a **flag** variable between tasks,
+- create a mutex to share a **queueError** variable between tasks,
 - create a queue (15 samples of uint16_t),
 - create two tasks described above,
 - start FreeRTOS scheduler,
 - implement printf() redirection to serial port,
-- implement **measure** task as a periodic one, period = 1000 [ms],
-- implement **comm** task as a periodic one, period = 1000 [ms],
+- implement **measure** task as a periodic one,
+- implement **comm** task as a periodic one,
 - implement *proper* communication between **measure** and **comm** 
 using created mutex and queue.
 
@@ -165,9 +165,10 @@ Three values should be printed via **comm** task:
 - current time expressed in ticks,
 - ADC value,
 - queue size,
-- error (flag).
+- queueError (flag).
 
-Flag can be assigned with four values (QueueStatus):
+Flag can be assigned with four values (implement as 
+enumeration type QueueStatus):
 - QueueOK (0) when a item was successfully sent to queue,
 - QueueWriteProblem (1) when there was a problem during sending 
 an item to the queue,
@@ -175,7 +176,7 @@ an item to the queue,
 - QueueCantRead (3) an item could not be received from 
 the queue.
 
-Discover each state of the queue and print corresponding 
+Identify each state of the queue and print corresponding 
 information.
 
 Below you can see an example of an output:
@@ -246,7 +247,94 @@ time: 18800, measured value: 4035, queue size 4, error 0
 
 ## Subtask 3
 
-TBA
+Subtask 3 is an extension to subtask 1 where FreeRTOS 
+capabilities are used.
+
+The aim of this exercise is to implement a queue 
+of size equal to 1 samples of QueueMessages. 
+This implementation is called mail box where 
+message is broadcasted to the listeners.
+
+Two tasks should be created **measure** and **comm**.
+In addition to **measure** and **comm** a callback from 
+ADC cmpleted conversion should be implemented 
+where an **adc_flag** should be set to 
+one and the LED should be toggled.
+
+Task **measure** should be made periodical with period 
+equal to 300 [ms] (not ticks). However, only when 
+there was a completed conversion (**adc_flag == 1**)
+it should send a message through the queue 
+(overwrite it with a new message), either 
+**QueueMsgNewData** or **QueueMsgNewDataChange**. 
+The message should switch to notify listening task 
+of change.
+
+Task **comm** should be also periodical with 
+period equal to 1000 [ms].
+The **comm** task should only peek the value 
+stored in the queue. 
+
+In this exercise you have to fill out following gaps:
+- include all necessary headers **stdio.h**, **FreeRTOS.h**,
+**task.h**, **semphr.h**, **queue.h** (in this order),
+- start TIM6 in time base mode with interrupts,
+- start ADC1 in DMA mode,
+- implement ADC callback,
+- create a mutex to share a **queueError** variable between tasks,
+- create a queue (1 samples of QueueMessages),
+- create two tasks described above,
+- start FreeRTOS scheduler,
+- implement printf() redirection to serial port,
+- implement **measure** task as a periodic one, period = 300 [ms],
+- implement **comm** task as a periodic one, period = 1000 [ms],
+- implement *proper* communication between **measure** and **comm** 
+using created mutex and queue.
+
+Three values should be printed via **comm** task:
+- current time expressed in ticks,
+- ADC value,
+- queue message,
+- queueError (flag).
+
+Flag can be assigned with four values (QueueStatus):
+- QueueOK (0) when a item was successfully sent to queue,
+- QueueWriteProblem (1) when there was a problem during sending 
+an item to the queue,
+- QueueEmpty (2) queue was empty,
+- QueueCantRead (3) an item could not be received from 
+the queue.
+
+The queue message type should be assigned with one of three 
+values (implement as enumeration type QueueMessages):
+- QueueMsgNoData (0) there is no data, 
+- QueueMsgNewData (1) new data available, 
+- QueueMsgNewDataChange (2) new data available, same as 
+QueueMsgNewData but allows to discover if there was a 
+new portion of data.
+
+Identify each state and message of the queue and print corresponding 
+information.
+
+Below you can see an example of an output:
+```
+Starting!
+time: 0, measured value: 0, queue msg 0, error 0
+time: 2000, measured value: 4036, queue msg 1, error 0
+time: 3000, measured value: 4036, queue msg 2, error 0
+time: 4000, measured value: 4036, queue msg 1, error 0
+time: 5000, measured value: 4036, queue msg 2, error 0
+time: 6000, measured value: 0, queue msg 1, error 0
+time: 7000, measured value: 4035, queue msg 2, error 0
+time: 8000, measured value: 4036, queue msg 1, error 0
+time: 9000, measured value: 4036, queue msg 2, error 0
+time: 10000, measured value: 0, queue msg 1, error 0
+time: 11000, measured value: 0, queue msg 2, error 0
+time: 12000, measured value: 4036, queue msg 1, error 0
+time: 13000, measured value: 4035, queue msg 2, error 0
+time: 14000, measured value: 4035, queue msg 1, error 0
+time: 15000, measured value: 4035, queue msg 2, error 0
+```
 
 # Useful functions
 

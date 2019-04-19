@@ -32,7 +32,6 @@
 // --> include all necessary headers for
 // printf() redirection
 // FreeRTOS related headers
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -67,6 +66,10 @@ void SystemClock_Config(void);
 
 enum QueueStatus {
 	QueueOK, QueueWriteProblem, QueueEmpty, QueueCantRead
+};
+
+enum QueueMessages {
+	QueueMsgNoData, QueueMsgNewData, QueueMsgNewDataChange,
 };
 
 uint16_t measurement;
