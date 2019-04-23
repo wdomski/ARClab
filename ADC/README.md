@@ -86,8 +86,144 @@ and ask for permission to proceed further.
 The ADC1 is configured in such a way that the 
 conversion is triggered by TIM6. It is required to 
 start a timer TIM6 in time base mode with interrupts 
+and start ADC1 peripheral (without interrupts or DMA).
+
+There should be created two tasks:
+- **measure**, a task responsible for reading measurements 
+from ADC and storing it in memory. This task 
+should be a periodic one with period equal to 1000 [ms],
+- **comm** prints measured value via serial ports 
+and determines if a button was pushed or not. This task 
+should be a periodic one with period equal to 1000 [ms].
+
+More information about FreeRTOS can be found in [FreeRTOSMastering] 
+and [FreeRTOSManual].
+
+## Subtask 1
+
+In this exercise you have to fill out following gaps:
+- include all necessary headers **stdio.h**,
+- start TIM6 in time base mode with interrupts,
+- start ADC1,
+- write code that will read measured data from ADC periodically.
+
+**In this exercise do not implement FreeRTOS tasks.**
+
+Below you can see an example of an output:
+```
+4029, released
+4035, released
+4031, released
+4031, released
+0, pushed
+0, pushed
+4031, released
+0, pushed
+0, pushed
+4029, released
+4029, released
+```
+
+## Subtask 2
+
+Subtask 2 is an extension to subtask 1 where FreeRTOS 
+capabilities are used.
+
+In this exercise you have to fill out following gaps:
+- include all necessary headers **stdio.h**, **FreeRTOS.h**,
+**task.h**, **semphr.h** (in this order),
+- start TIM6 in time base mode with interrupts,
+- start ADC1,
+- create a mutex,
+- create two tasks described above,
+- start FreeRTOS scheduler,
+- implement printf() redirection to serial port,
+- implement **measure** task as a periodic one, period = 1000 [ms],
+- implement **comm** task as a periodic one, period = 1000 [ms].
+
+Below you can see an example of an output:
+```
+4036, released
+4030, released
+4031, released
+4036, released
+0, pushed
+0, pushed
+4024, released
+4031, released
+4031, released
+0, pushed
+4031, released
+4030, released
+```
+
+## Subtask 3
+
+Subtask 3 is a modification of Subtask 2 where 
+instead of periodically calling **comm** task an 
+event group is used instead. The **comm** task 
+should be only waked up when the measurement is 
+ready to process.
+
+Find proper API for handling Event Groups in [FreeRTOSManual].
+
+In this exercise you have to fill out following gaps:
+- include **event_groups.h** header file,
+- create global variable for holding Event Group,
+- create Event Group,
+- in **measure** task set a flag (bit 0) in Event group,
+- in **comm** task use appropriate API for waiting for 
+an event. **Wait only for 400 [ms]**,
+- make additional appropriate alterations to the code.
+
+Below you can see an example of an output:
+```
+4029, released
+no event
+no event
+4031, released
+no event
+no event
+4031, released
+no event
+no event
+4031, released
+no event
+no event
+0, pushed
+no event
+no event
+4031, released
+no event
+no event
+Below you can see an example of an output:
+```
+
+# Task 3
+
+Import **ADC_ex3** project into Atollic TrueSTUDIO.
+The aim of this exercise is to show how to implement tasks in 
+FreeRTOS. The exercise involves:
+- periodic task creation,
+- starting FreeRTOS scheduler, 
+- communication between tasks using mutexes,
+- communication using queues in different modes.
+
+You have to connect two pins with a swire. Pin PA0 (analog input) 
+and PC13 (blue button). Connect those two ports 
+while the dev board is not connected to power!
+Use the leaflet given out during classes to identify the 
+MCU pins.
+Before proceeding further inform teacher about the connection 
+and ask for permission to proceed further.
+
+**This exercise contains three subexercises.**
+
+The ADC1 is configured in such a way that the 
+conversion is triggered by TIM6. It is required to 
+start a timer TIM6 in time base mode with interrupts 
 and start ADC1 peripheral in DMA mode. This configuration 
-allow for completely CPU-free periodic measurement of 
+allows for completely CPU-free periodic measurement of 
 analog signal.
 
 There should be created two tasks:
@@ -105,7 +241,7 @@ In this exercise you have to fill out following gaps:
 - include all necessary headers **stdio.h**,
 - start TIM6 in time base mode with interrupts,
 - start ADC1 in DMA mode,
-- write code that will print measured data periodically, 
+- write code that will prints measured data periodically, 
 period should be equal to 1000 [ms].
 
 **In this exercise do not implement FreeRTOS tasks.**
@@ -131,7 +267,7 @@ Subtask 2 is an extension to subtask 1 where FreeRTOS
 capabilities are used.
 
 The aim of this exercise is to implement a queue 
-of size equal to 15 samples of uint16_t. 
+of size equal to 15 samples of uint16_t type. 
 Two tasks should be created **measure** and **comm**.
 Task **measure** should be made periodical with period 
 equal to 300 [ms] (not ticks).
@@ -251,13 +387,13 @@ Subtask 3 is an extension to subtask 1 where FreeRTOS
 capabilities are used.
 
 The aim of this exercise is to implement a queue 
-of size equal to 1 samples of QueueMessages. 
+of size equal to 1 sample of QueueMessages type. 
 This implementation is called mail box where 
 message is broadcasted to the listeners.
 
 Two tasks should be created **measure** and **comm**.
 In addition to **measure** and **comm** a callback from 
-ADC cmpleted conversion should be implemented 
+ADC completed conversion should be implemented 
 where an **adc_flag** should be set to 
 one and the LED should be toggled.
 
@@ -374,11 +510,43 @@ int _write(int file, char *ptr, int len) {
 
 ## FreeRTOS related
 
+### Mutexes
+
 Create a mutex. This function returns a mutex:
 - xSemaphoreCreateMutex();
 
+Take (lock) mutex:
+- xSemaphoreTake();
+
+Give (unlock) mutex:
+- xSemaphoreGive();
+
+### Event Groups
+
+Create an Event Group:
+- xEventGroupCreate();
+
+Set bits in an Event Group:
+- xEventGroupSetBits();
+
+Wait for bits to be set:
+- xEventGroupWaitBits();
+
+### Queues
+
 Create a queue:
 - xQueueCreate(numberOfItems, sizeOfItem);
+
+Check how meny items is currently in queue:
+- uxQueueMessagesWaiting();
+
+Receive an item from queue:
+- xQueueReceive();
+
+Send item to queue:
+- xQueueSendToBack();
+
+### Task related
 
 Create a task **example** with  **exampleTask** function which 
 implements the task:
