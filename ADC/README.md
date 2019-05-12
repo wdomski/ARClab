@@ -161,9 +161,10 @@ Below you can see an example of an output:
 
 Subtask 3 is a modification of Subtask 2 where 
 instead of periodically calling **comm** task an 
-event group is used instead. The **comm** task 
-should be only waked up when the measurement is 
-ready to process.
+event group is used instead. A mutex is 
+still being used for data synchronization. 
+The **comm** task should be only waked up when 
+the measurement is ready to process.
 
 Find proper API for handling Event Groups in [FreeRTOSManual].
 
@@ -196,7 +197,6 @@ no event
 4031, released
 no event
 no event
-Below you can see an example of an output:
 ```
 
 # Task 3
@@ -545,6 +545,9 @@ Receive an item from queue:
 
 Send item to queue:
 - xQueueSendToBack();
+
+Check the item without taking it out from queue:
+- xQueuePeek();
 
 ### Task related
 

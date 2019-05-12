@@ -70,6 +70,13 @@ mutexes and queues.
 
 Exercises from **ADC**, task 3 (subtask 1, 2 & 3).
 
+## Laboratory 7
+
+Implementation of a PID controller for a DC motor simulator 
+using FreeRTOS.
+
+Exercises from **PID**, task 1.
+
 # Troubleshooting
 
 - If the Atollic TrueSTUDIO displays a message that 
@@ -125,6 +132,8 @@ Mentioned files can be found at [st.com](https://www.st.com) or at [edu.domski.p
 - [FreeRTOSMastering] R. Barry, Mastering the FreeRTOS™ Real Time Kernel, Real Time Engineers Ltd., 2016.
 
 - [FreeRTOSManual] Amazon Web Services, The FreeRTOS™ Reference Manual, API Functions and Configuration Options, Amazon.com Inc., 2017.
+
+- [PID] K. J. Åström and T. Hägglund, PID Controllers: Theory, Design, and Tuning, 1995, Instrument Society of America
 
 
 
