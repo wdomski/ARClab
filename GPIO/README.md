@@ -10,7 +10,7 @@ STM32 MCUs.
 
 First a project with a STM32CubeMX application is created then 
 the code is generated from this project. Next, the 
-generated project is imported into Atollic TrueSTUDIO IDE 
+generated project is imported into STM32CubeIDE 
 where it is configured. Basic configuration considers:
 
 - turning off optimization (-O0),
@@ -30,52 +30,79 @@ pausing and resuming session.
 
 # Task 2
 
-Compile and run **GPIO_ex2** project.
+Compile and run **GPIO_ex1** project.
+
 The goal is to familiarize students with changing 
 state of a digital output.
+
+Add toggling of a LED diode connected to **LED2** connector.
+
 The effect can be observed on dev board where 
-a LED diode wil change its state (turned on or off).
+a LED diode will change its state (turned on or off).
 
 # Task 3
 
-Create a project or use an existing one (**GPIO_ex1** or **GPIO_ex2**)
-to write a program which will read digital input state (button) 
-and toggle LED every time when a button is pressed. 
+Create a project or use an existing one (**GPIO_ex1**).
 
-Implement debouncing procedure. This procedure should 
-not introduce any delay to the system (busy waits, etc.) 
-but should be time dependent. 
+Write a program which will change state of a LED diode 
+connected to **TIMER4** connector.
+Moreover, implement reading from serial interface.
+For this use function
+```C
+HAL_UART_Receive_IT();
+```
 
-The application should work as follows.
-When a button is pressed it immediately changes current 
-state of the LED. During hold and after release the LED 
-state should not change.
+Remember to enable interrupts.
+
+Implement a callback to retrieve data which was 
+entered by a user
+```C
+HAL_UART_RxCpltCallback();
+```
+
+When user enters '0' the LED on **TIMER4** should stop 
+emitting light.
+When user enters '1' the LED on **TIMER4** should start
+emitting light.
+When user enters 't' the LED on **TIMER4** should toggle 
+it state.
+All other entries from user should be ignored.
 
 
 # Useful functions
 
 Reading digital input state
-- HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
+```C
+HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
+```
 
 Toggling digital output state
-- HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+```C
+HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+```
 
 Delay measured in [ms] (busy wait)
-- HAL_Delay(1000);
+```C
+HAL_Delay(1000);
+```
 
 Get current number of ticks measured since 
 MCU start (in this exercise 1 tick = 1 [ms])
-- HAL_GetTick();
+```C
+HAL_GetTick();
+```
 
 Setting digital output to low/high
-- HAL_GPIO_WritePin( LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
-- HAL_GPIO_WritePin( LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+```C
+HAL_GPIO_WritePin( LD2_GPIO_Port, LD2_Pin, GPIO_PIN_RESET);
+HAL_GPIO_WritePin( LD2_GPIO_Port, LD2_Pin, GPIO_PIN_SET);
+```
 
-Redirection of printf() function output to serial port 
-can be done with redefinition of _write() function.
+Redirection of **printf()** function output to serial port 
+can be done with redefinition of **_write()** function.
 Also include **stdio.h**.
 
-```
+```C
 int _write(int file, char *ptr, int len) {
 	HAL_UART_Transmit(&huart2, (uint8_t *) ptr, len, 50);
 	return len;
