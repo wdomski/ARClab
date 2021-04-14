@@ -37,7 +37,6 @@
  ******************************************************************************
  */
 /* USER CODE END Header */
-
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "usart.h"
@@ -81,7 +80,7 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 
 int _write(int file, char *ptr, int len) {
-	HAL_UART_Transmit(&huart2, (uint8_t *)ptr, len, 50);
+	HAL_UART_Transmit(&huart2, (uint8_t*) ptr, len, 50);
 	return len;
 }
 
@@ -127,11 +126,13 @@ int main(void) {
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
-		status = HAL_GPIO_ReadPin(B1_GPIO_Port, B1_Pin);
+		HAL_GPIO_TogglePin(TIMER1_GPIO_Port, TIMER1_Pin);
+		status = HAL_GPIO_ReadPin(TIMER5_GPIO_Port, TIMER5_Pin);
 
 		printf("Current state of button is %d, (%d)\r\n", status, counter);
 
-		HAL_GPIO_TogglePin(LD2_GPIO_Port, LD2_Pin);
+		HAL_GPIO_TogglePin(LED_ON_BOARD_GPIO_Port, LED_ON_BOARD_Pin);
+		HAL_GPIO_TogglePin(LED1_GPIO_Port, LED1_Pin);
 
 		HAL_Delay(1000);
 
@@ -149,7 +150,8 @@ void SystemClock_Config(void) {
 	RCC_ClkInitTypeDef RCC_ClkInitStruct = { 0 };
 	RCC_PeriphCLKInitTypeDef PeriphClkInit = { 0 };
 
-	/**Initializes the CPU, AHB and APB busses clocks
+	/** Initializes the RCC Oscillators according to the specified parameters
+	 * in the RCC_OscInitTypeDef structure.
 	 */
 	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
 	RCC_OscInitStruct.HSIState = RCC_HSI_ON;
@@ -164,7 +166,7 @@ void SystemClock_Config(void) {
 	if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK) {
 		Error_Handler();
 	}
-	/**Initializes the CPU, AHB and APB busses clocks
+	/** Initializes the CPU, AHB and APB buses clocks
 	 */
 	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
 			| RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
@@ -181,7 +183,7 @@ void SystemClock_Config(void) {
 	if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInit) != HAL_OK) {
 		Error_Handler();
 	}
-	/**Configure the main internal regulator output voltage
+	/** Configure the main internal regulator output voltage
 	 */
 	if (HAL_PWREx_ControlVoltageScaling(PWR_REGULATOR_VOLTAGE_SCALE1)
 			!= HAL_OK) {
@@ -206,18 +208,18 @@ void Error_Handler(void) {
 
 #ifdef  USE_FULL_ASSERT
 /**
- * @brief  Reports the name of the source file and the source line number
- *         where the assert_param error has occurred.
- * @param  file: pointer to the source file name
- * @param  line: assert_param error line source number
- * @retval None
- */
-void assert_failed(char *file, uint32_t line)
+  * @brief  Reports the name of the source file and the source line number
+  *         where the assert_param error has occurred.
+  * @param  file: pointer to the source file name
+  * @param  line: assert_param error line source number
+  * @retval None
+  */
+void assert_failed(uint8_t *file, uint32_t line)
 {
-	/* USER CODE BEGIN 6 */
+  /* USER CODE BEGIN 6 */
 	/* User can add his own implementation to report the file name and line number,
 	 tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-	/* USER CODE END 6 */
+  /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
 

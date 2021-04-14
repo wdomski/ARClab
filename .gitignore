@@ -1,13 +1,18 @@
-
-#excluded files for Matlab
+# Excluded files for Matlab
 
 3RMatlab/modelODEfull.m
 3RMatlab/effectorTrajectoryGenerator3Dfull.m
 3RMatlab/startFull.m
 *.asv
 
-# Atollic TrueSTUDIO temporary files and directories
+# IDE temporary files and directories
 
 Debug
 mainfull*.c
 *.bak 
+mx.scratch
+
+# Conversion files
+
+*.log
+.*_org
