@@ -172,6 +172,31 @@ figure
 
 ![PuTTY configuration](https://github.com/wdomski/ARClab/blob/develop/images/putty.png "PuTTY configuration") 
 
+## Serial port
+
+Most of the dev boards are equipped with a serial port. 
+On each server a **minicom** program is available. 
+It delivers a console interface for serial port. 
+Each dev board has a unique device through which the 
+serial interface is available. Please mind that the 
+device can change over time. To identify current 
+device number please refer to description of 
+specific dev board available through **status server** service.
+
+```Bash
+minicom --device /dev/ttyAMC0
+```
+
+Default configuration allows to open a session with following 
+serial communication parameters (115200, 8N1):
+- 115200 baud, transmission rate,
+- 8 bits of data,
+- N no parity control,
+- 1, a single stop bit.
+
+In order to close *minicom* **Ctrl+a** followed by **x** 
+has to be entered.
+
 # Troubleshooting
 
 - If an error about erasing Flash memory appear during 
