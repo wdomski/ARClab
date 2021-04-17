@@ -8,9 +8,9 @@ The goal of this project is to familiarize students with
 workflow of creating an embedded solution for 
 STM32 MCUs. 
 
-First a project with a STM32CubeMX application is created then 
+First a project with a code generator application is created then 
 the code is generated from this project. Next, the 
-generated project is imported into STM32CubeIDE 
+generated project is imported into IDE 
 where it is configured. Basic configuration considers:
 
 - turning off optimization (-O0),
