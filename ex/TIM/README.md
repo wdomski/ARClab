@@ -11,28 +11,42 @@ will only flash the MCU without entering debug mode.
 
 # Task 1
 
-Import **TIM_ex1** project into Atollic TrueSTUDIO.
+Import **TIM_ex1** project into IDE.
 The aim of this exercise is to show how the simple PWM 
 output signal can be used to change the 
-brightness of a LED.
+brightness of a LED. Use connector **TIMER4** 
+to which a LED diode is connected.
 
 In this task you have to fill out following gaps:
 
-- implement debouncing,
 - start PWM generation,
-- update the PWM duty signal every time a button is pressed.
+- implement callback for UART incoming transmission,
+- adjust brightness according to user input,
+- update the PWM duty signal every time user sends data.
+
+User can send
+|Value|PWM duty|
+|-|-|
+|0| 0   %|
+|1| 25  %|
+|2| 50  %|
+|3| 75  %|
+|4| 100 %|
+
+Any other value sent by user should be ignored and appropriate 
+information should be outputted on serial interface.
 
 Every time when a change in PWM duty occurs 
 the MCU should send appropriate information via 
-serial port (use printf() redirection).
+serial port (use **printf()** redirection).
 
 # Task 2
 
-Import **TIM_ex2** project into Atollic TrueSTUDIO.
+Import **TIM_ex2** project into IDE.
 The aim of this exercise is to show how the Input Capture 
 mode works. This application counts time (in timer [us])
-between button press events. The information is passed to 
-serial output via redirection of *printf()* function.
+between level changes. The information is passed to 
+serial output via redirection of **printf()** function.
 
 Below you can see example of an output:
 
@@ -88,6 +102,16 @@ Redefine following callback function from Input Capture
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
 }
+```
+
+Start UART in interrupt mode
+```C
+HAL_UART_Receive_IT();
+```
+
+Redefine incoming transmission callback for UART
+```C
+HAL_UART_RxCpltCallback();
 ```
 
 Redirection of printf() function output to serial port 
