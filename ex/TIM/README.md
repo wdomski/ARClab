@@ -48,26 +48,38 @@ mode works. This application counts time (in timer [us])
 between level changes. The information is passed to 
 serial output via redirection of **printf()** function.
 
+For this use **TIMER1** connector configured as Input Capture 
+and **TIMER5** configured as GPIO output. This is possible because 
+these two connectors are connected, refer to 
+[board schematic](https://github.com/wdomski/ARClab/blob/develop/boards/NUCLEO64-Board.pdf).
+
+Familiarize with the configuration of the project, 
+in particular timer configuration for **TIMER1** 
+and deduce the time resolution with which the 
+input signal is measured. This will be needed to print proper 
+value of ms on serial interface.
+
 Below you can see example of an output:
 
 ```
 Time since last button press: 1019 [ms]
-Time since last button press: 6 [ms]
 Time since last button press: 5234 [ms]
-Time since last button press: 3 [ms]
 Time since last button press: 3621 [ms]
 Time since last button press: 1169 [ms]
-Time since last button press: 4 [ms]
 Time since last button press: 5203 [ms]
 Time since last button press: 4371 [ms]
 ```
 
-Can you see something interesting?
+The change of state of the **TIMER5** should only occur 
+when user sends *t* for toggle via serial interface.
 
 In this task you have to fill out following gaps:
 
 - capture the input capture event, store time and reset counter, 
 this can be done in Callback function,
+
+- implement callback from UART to get user input,
+
 - inform user about time since last press event.
 
 You have to connect two pins with a wire. Pin PA0 (timer input 
@@ -83,25 +95,33 @@ During the implementation use provided variables: **flag** and **time**.
 # Useful functions
 
 Set desired duty of a PWM on selected channel.
-- __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, duty);
+```C
+__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, duty);
+```
 
 Start PWM signal generation on selected channel.
-- HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+```C
+HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+```
 
 Returns current number of ticks counted by a timer.
-- __HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_1);
+```C
+__HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_1);
+```
 
 Reset counter register of selected timer with desired value.
-- __HAL_TIM_SET_COUNTER(&htim2, 0);
+```C
+__HAL_TIM_SET_COUNTER(&htim2, 0);
+```
 
 Start Timer in Input Capture mode with interrupts.
-- HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
+```C
+HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
+```
 
 Redefine following callback function from Input Capture
-```
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-{
-}
+```C
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim);
 ```
 
 Start UART in interrupt mode
@@ -114,8 +134,8 @@ Redefine incoming transmission callback for UART
 HAL_UART_RxCpltCallback();
 ```
 
-Redirection of printf() function output to serial port 
-can be done with redefinition of _write() function.
+Redirection of **printf()** function output to serial port 
+can be done with redefinition of **_write()** function.
 Also include **stdio.h**.
 
 ```

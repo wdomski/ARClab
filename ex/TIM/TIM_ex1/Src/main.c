@@ -61,8 +61,8 @@ void SystemClock_Config(void);
 /* USER CODE BEGIN 0 */
 
 // use to notify main loop about proper input data
-uint8_t flag;
-uint16_t duty = 500;
+volatile uint8_t flag;
+volatile uint16_t duty = 500;
 
 //redefine _write
 
