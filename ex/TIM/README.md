@@ -11,49 +11,75 @@ will only flash the MCU without entering debug mode.
 
 # Task 1
 
-Import **TIM_ex1** project into Atollic TrueSTUDIO.
+Import **TIM_ex1** project into IDE.
 The aim of this exercise is to show how the simple PWM 
 output signal can be used to change the 
-brightness of a LED.
+brightness of a LED. Use connector **TIMER4** 
+to which a LED diode is connected.
 
 In this task you have to fill out following gaps:
 
-- implement debouncing,
 - start PWM generation,
-- update the PWM duty signal every time a button is pressed.
+- implement callback for UART incoming transmission,
+- adjust brightness according to user input,
+- update the PWM duty signal every time user sends data.
+
+User can send
+|Value|PWM duty|
+|-|-|
+|0| 0   %|
+|1| 25  %|
+|2| 50  %|
+|3| 75  %|
+|4| 100 %|
+
+Any other value sent by user should be ignored and appropriate 
+information should be outputted on serial interface.
 
 Every time when a change in PWM duty occurs 
 the MCU should send appropriate information via 
-serial port (use printf() redirection).
+serial port (use **printf()** redirection).
 
 # Task 2
 
-Import **TIM_ex2** project into Atollic TrueSTUDIO.
+Import **TIM_ex2** project into IDE.
 The aim of this exercise is to show how the Input Capture 
 mode works. This application counts time (in timer [us])
-between button press events. The information is passed to 
-serial output via redirection of *printf()* function.
+between level changes. The information is passed to 
+serial output via redirection of **printf()** function.
+
+For this use **TIMER1** connector configured as Input Capture 
+and **TIMER5** configured as GPIO output. This is possible because 
+these two connectors are connected, refer to 
+[board schematic](https://github.com/wdomski/ARClab/blob/develop/boards/NUCLEO64-Board.pdf).
+
+Familiarize with the configuration of the project, 
+in particular timer configuration for **TIMER1** 
+and deduce the time resolution with which the 
+input signal is measured. This will be needed to print proper 
+value of ms on serial interface.
 
 Below you can see example of an output:
 
 ```
 Time since last button press: 1019 [ms]
-Time since last button press: 6 [ms]
 Time since last button press: 5234 [ms]
-Time since last button press: 3 [ms]
 Time since last button press: 3621 [ms]
 Time since last button press: 1169 [ms]
-Time since last button press: 4 [ms]
 Time since last button press: 5203 [ms]
 Time since last button press: 4371 [ms]
 ```
 
-Can you see something interesting?
+The change of state of the **TIMER5** should only occur 
+when user sends *t* for toggle via serial interface.
 
 In this task you have to fill out following gaps:
 
 - capture the input capture event, store time and reset counter, 
 this can be done in Callback function,
+
+- implement callback from UART to get user input,
+
 - inform user about time since last press event.
 
 You have to connect two pins with a wire. Pin PA0 (timer input 
@@ -69,29 +95,47 @@ During the implementation use provided variables: **flag** and **time**.
 # Useful functions
 
 Set desired duty of a PWM on selected channel.
-- __HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, duty);
+```C
+__HAL_TIM_SET_COMPARE(&htim2, TIM_CHANNEL_1, duty);
+```
 
 Start PWM signal generation on selected channel.
-- HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+```C
+HAL_TIM_PWM_Start(&htim2, TIM_CHANNEL_1);
+```
 
 Returns current number of ticks counted by a timer.
-- __HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_1);
+```C
+__HAL_TIM_GET_COMPARE(&htim2, TIM_CHANNEL_1);
+```
 
 Reset counter register of selected timer with desired value.
-- __HAL_TIM_SET_COUNTER(&htim2, 0);
+```C
+__HAL_TIM_SET_COUNTER(&htim2, 0);
+```
 
 Start Timer in Input Capture mode with interrupts.
-- HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
+```C
+HAL_TIM_IC_Start_IT(&htim2, TIM_CHANNEL_1);
+```
 
 Redefine following callback function from Input Capture
-```
-void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
-{
-}
+```C
+void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim);
 ```
 
-Redirection of printf() function output to serial port 
-can be done with redefinition of _write() function.
+Start UART in interrupt mode
+```C
+HAL_UART_Receive_IT();
+```
+
+Redefine incoming transmission callback for UART
+```C
+HAL_UART_RxCpltCallback();
+```
+
+Redirection of **printf()** function output to serial port 
+can be done with redefinition of **_write()** function.
 Also include **stdio.h**.
 
 ```

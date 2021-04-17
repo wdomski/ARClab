@@ -11,6 +11,9 @@ Debug
 mainfull*.c
 *.bak 
 mx.scratch
+Backup
+*.bak
+.mxproject
 
 # Conversion files
 

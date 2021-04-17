@@ -11,40 +11,23 @@ will only flash the MCU without entering debug mode.
 
 # Task 1
 
-Import **ADC_ex1** project into Atollic TrueSTUDIO.
+Import **ADC_ex1** project into IDE.
 The aim of this exercise is to show how basic ADC 
 measurement with interrupts works.
-The ADC conversion is triggered by software. When the 
-converted digital value is ready an interrupt is rosed.
-Corresponding callback function is called then called.
+The ADC conversion is triggered by software. Two 
+ADC channels were configured for **ADC3** and **ADC4** 
+connectors, both for ADC1 peripheral. 
 
-To imitate analog signal digital signal from blue pushbutton 
-is connected to the analog input.
+Below a table was presented to which ADC peripherals 
+and channels connectors were attached.
 
-Below you can see an example of an output:
-```
-Measured value = 4031
-Measured value = 0
-Measured value = 4034
-Measured value = 4034
-Measured value = 0
-Measured value = 0
-Measured value = 4031
-Measured value = 4031
-Measured value = 4032
-```
-Can you explain it?
+|Connector|Peripheral|Channel    |
+|-|-|-|
+|**ADC3** | ADC1     | Channel 4 |
+|**ADC4** | ADC1     | Channel 13|
 
-You have to connect two pins with a wire. Pin PA0 (analog input) 
-and PC13 (blue button). Connect those two ports 
-while the dev board is not connected to power!
-Use the leaflet given out during classes to identify the 
-MCU pins.
-Before proceeding further inform teacher about the connection 
-and ask for permission to proceed further.
-
-Implement a simple state machine which draft is included in 
-*main.h* file. Following states are available:
+Implement a state machine which draft is included in 
+*main.c* file. Following states are available:
 - ADC_Idle (currently there is no conversion)
 - ADC_Converting (ADC is measuring the analog signal)
 - ADC_Ready (ADC measurement is ready)
@@ -53,19 +36,35 @@ The measurement should be triggered every one second.
 For this use **HAL_GetTick()**. Do not introduce explicit 
 delays.
 
-During the implementation use provided variables: **flag**, **measurement** 
-and **lasttime**.
+During the implementation use provided variables: 
+- **flag** to discover if IRQ was handled, 
+- **measurement** holds measurement, 
+- **last_time** is time in ms of last measurement, 
+- **adc_channels** an array holding ADC channels, use 
+**measured_channel** to move through available ADC channels,
+- **measured_channel** currently measured channel, an index of 
+**adc_channels** array.
 
 In this task you have to fill out following gaps:
 
 - implement the corresponding callback function for ADC measurement,
 - implement state machine which carries for measurement and 
 communication flow,
-- introduce periodical flow of measurement.
+- introduce periodical flow of measurement,
+- periodically display which channels was measured and what value 
+it holds.
+
+Use following function to change actively measured channel 
+on specific rank. You should chose proper ADC peripheral, 
+rank (always set to *ADC_REGULAR_RANK_1*) and 
+channel (from above table).
+```C
+LL_ADC_REG_SetSequencerRanks(adc, rank, channel);
+```
 
 # Task 2
 
-Import **ADC_ex2** project into Atollic TrueSTUDIO.
+Import **ADC_ex2** project into IDE.
 The aim of this exercise is to show how to implement tasks in 
 FreeRTOS. The exercise involves:
 - periodic task creation,
