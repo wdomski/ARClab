@@ -13,6 +13,7 @@ mainfull*.c
 mx.scratch
 Backup
 *.bak
+.mxproject
 
 # Conversion files
 
