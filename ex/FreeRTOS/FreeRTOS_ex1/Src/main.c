@@ -20,11 +20,16 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+// --> include all necessary headers for
+// printf() redirection
+// FreeRTOS related headers
 
 /* USER CODE END Includes */
 
@@ -58,17 +63,21 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-enum Stages {
-	ADC_Idle, ADC_Converting, ADC_Ready,
-};
+uint16_t measurement;
+SemaphoreHandle_t mutex;
 
-volatile enum Stages flag = ADC_Idle;
-volatile uint16_t measurement;
-volatile uint8_t measured_channel;
-volatile uint32_t adc_channels[] = { ADC_CHANNEL_4, ADC_CHANNEL_13 };
+void measureTask(void *args) {
 
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
+	for (;;) {
 
+	}
+}
+
+void commTask(void *args) {
+
+	for (;;) {
+
+	}
 }
 
 /* USER CODE END 0 */
@@ -79,8 +88,6 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
  */
 int main(void) {
 	/* USER CODE BEGIN 1 */
-
-	uint32_t last_time;
 
 	/* USER CODE END 1 */
 
@@ -102,26 +109,29 @@ int main(void) {
 
 	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
-	MX_ADC1_Init();
 	MX_USART2_UART_Init();
+	MX_ADC1_Init();
+	MX_TIM6_Init();
 	/* USER CODE BEGIN 2 */
+
+	// --> start TIM6 in interrupt
+	// --> start ADC1
+
+	// --> create a mutex
+
+	// --> create all necessary tasks
+	printf("Starting!\r\n");
+
+	// --> start FreeRTOS scheduler
 
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1) {
-		switch (flag) {
-		case ADC_Idle: {
-			break;
-		}
-		case ADC_Converting: {
-			break;
-		}
-		case ADC_Ready: {
-			break;
-		}
-		}
+
+		// --> place routine reading from ADC for subtask 1 
+
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
