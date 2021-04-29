@@ -20,12 +20,17 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "adc.h"
+#include "dma.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+// --> include all necessary headers for
+// printf() redirection
+// FreeRTOS related headers
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,17 +63,43 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-enum Stages {
-	ADC_Idle, ADC_Converting, ADC_Ready,
+enum QueueStatus {
+	QueueOK, QueueWriteProblem, QueueEmpty, QueueCantRead
 };
 
-volatile enum Stages flag = ADC_Idle;
-volatile uint16_t measurement;
-volatile uint8_t measured_channel;
-volatile uint32_t adc_channels[] = { ADC_CHANNEL_4, ADC_CHANNEL_13 };
+enum QueueMessages {
+	QueueMsgNoData, QueueMsgNewData, QueueMsgNewDataChange,
+};
 
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
+uint16_t measurement;
+uint8_t queueError = QueueOK;
+SemaphoreHandle_t mutex;
+QueueHandle_t queue;
 
+void measureTask(void *args) {
+	TickType_t xLastWakeTime;
+	BaseType_t xStatus;
+
+	xLastWakeTime = xTaskGetTickCount();
+
+	for (;;) {
+
+	}
+}
+
+void commTask(void *args) {
+	TickType_t xLastWakeTime;
+	uint16_t measurement_local = 0;
+	uint16_t flag_local;
+	uint16_t histeresis = 0;
+	BaseType_t queue_size;
+	BaseType_t xStatus;
+
+	xLastWakeTime = xTaskGetTickCount();
+
+	for (;;) {
+
+	}
 }
 
 /* USER CODE END 0 */
@@ -79,8 +110,6 @@ void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
  */
 int main(void) {
 	/* USER CODE BEGIN 1 */
-
-	uint32_t last_time;
 
 	/* USER CODE END 1 */
 
@@ -102,26 +131,26 @@ int main(void) {
 
 	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
-	MX_ADC1_Init();
+	MX_DMA_Init();
 	MX_USART2_UART_Init();
+	MX_ADC1_Init();
+	MX_TIM6_Init();
 	/* USER CODE BEGIN 2 */
+
+	// --> start TIM6 in interrupt
+	// --> start ADC1 in DMA mode
+	// --> create a mutex
+	// --> create a queue
+	// --> create all necessary tasks
+	printf("Starting!\r\n");
+
+	// --> start FreeRTOS scheduler
 
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while (1) {
-		switch (flag) {
-		case ADC_Idle: {
-			break;
-		}
-		case ADC_Converting: {
-			break;
-		}
-		case ADC_Ready: {
-			break;
-		}
-		}
 		/* USER CODE END WHILE */
 
 		/* USER CODE BEGIN 3 */
