@@ -22,15 +22,15 @@ FreeRTOS. The exercise involves:
 **This exercise contains three sub-exercises.**
 
 The ADC1 for **ADC2** connector is configured in such a way 
-a software ocnversion launch is required. 
+a software conversion launch is required. 
 Further exercises may require changes to the imported project.
 It is required to start a timer TIM6 (1Hz frequency) in time 
 base mode with interrupts and start ADC1 peripheral 
 (without interrupts or DMA).
 
-Moreover, **TIMER2** connector was configured so it 
+Moreover, **TIMER3** connector was configured so it 
 generates a square wave with frequency of 1/3Hz ~= 0.33Hz.
-**TIMER2** connector is connected with **ADC2** connector
+**TIMER3** connector is connected with **ADC2** connector
 through low-pass filter.
 
 There should be created two tasks:
@@ -201,6 +201,22 @@ and start ADC1 peripheral in DMA mode. This configuration
 allows for completely CPU-free periodic measurement of 
 analog signal.
 
+Additional changes to the project are required:
+- enable interrupts on TIM6,
+- select trigger event as Update Event for TIM6,
+- select trigger source for ADC1,
+- configure DMA for ADC1 in circular mode,
+- enable DMA transfers on ADC completed conversion.
+
+It is required to start a timer TIM6 (1Hz frequency) in time 
+base mode with interrupts and start ADC1 peripheral 
+(without interrupts or DMA).
+
+Moreover, **TIMER3** connector was configured so it 
+generates a square wave with frequency of 1/3Hz ~= 0.33Hz.
+**TIMER3** connector is connected with **ADC2** connector
+through low-pass filter.
+
 There should be created two tasks:
 - **measure**, a task responsible for reading measurements 
 from ADC and storing it in memory. 
@@ -214,6 +230,7 @@ and [FreeRTOSManual].
 
 In this exercise you have to fill out following gaps:
 - include all necessary headers **stdio.h**,
+- start PWM generation for TIM1, channel 3 for **TIMER3** connector,
 - start TIM6 in time base mode with interrupts,
 - start ADC1 in DMA mode,
 - write code that will prints measured data periodically, 
