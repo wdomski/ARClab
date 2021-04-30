@@ -19,20 +19,17 @@ FreeRTOS. The exercise involves:
 - communication between tasks using mutexes,
 - communication using events via Event Groups.
 
-You have to connect two pins with a wire. Pin PA0 (analog input) 
-and PC13 (blue button). Connect those two ports 
-while the dev board is not connected to power!
-Use the leaflet given out during classes to identify the 
-MCU pins.
-Before proceeding further inform teacher about the connection 
-and ask for permission to proceed further.
+**This exercise contains three sub-exercises.**
 
-**This exercise contains three subexercises.**
-
-The ADC1 is configured in such a way that the 
+The ADC1 for **ADC2** connector is configured in such a way that the 
 conversion is triggered by TIM6. It is required to 
-start a timer TIM6 in time base mode with interrupts 
+start a timer TIM6 (1Hz frequency) in time base mode with interrupts 
 and start ADC1 peripheral (without interrupts or DMA).
+
+Moreover, **TIMER2** connector was configured so it 
+generates a square wave with frequency of 1/3Hz ~= 0.33Hz.
+**TIMER2** connector is connected with **ADC2** connector
+through low-pass filter.
 
 There should be created two tasks:
 - **measure**, a task responsible for reading measurements 
@@ -49,26 +46,38 @@ and [FreeRTOSManual].
 
 In this exercise you have to fill out following gaps:
 - include all necessary headers **stdio.h**,
-- start TIM6 in time base mode with interrupts,
+- start PWM generation for TIM1, channel 3 for **TIMER3** connector,
 - start ADC1,
-- write code that will read measured data from ADC periodically.
+- write code that will read measured data from ADC periodically,
+- print data via redirected printf(), both measurement and 
+local time in milliseconds.
 
 **In this exercise do not implement FreeRTOS tasks.**
 
-Below you can see an example of an output:
+Sample output from serial console:
 ```
-4029, released
-4035, released
-4031, released
-4031, released
-0, pushed
-0, pushed
-4031, released
-0, pushed
-0, pushed
-4029, released
-4029, released
+Starting!             
+ADC: 1341, time: 1002 
+ADC: 2996, time: 2005 
+ADC: 2045, time: 3008 
+ADC:  782, time: 4011 
+ADC: 2789, time: 5014 
+ADC: 1944, time: 6017 
+ADC:  779, time: 7020 
+ADC: 2788, time: 8023 
+ADC: 1922, time: 9026 
+ADC:  808, time: 10029
+ADC: 2796, time: 11032
+ADC: 1903, time: 12035
+ADC:  835, time: 13038
+ADC: 2807, time: 14041
+ADC: 1887, time: 15044
+ADC:  864, time: 16047
+ADC: 2819, time: 17050
 ```
+
+Can you explain why the square wave is deformed and 
+we are observing values other than minimum and maximum?
 
 ## Subtask 2
 
@@ -78,30 +87,41 @@ capabilities are used.
 In this exercise you have to fill out following gaps:
 - include all necessary headers **stdio.h**, **FreeRTOS.h**,
 **task.h**, **semphr.h** (in this order),
-- start TIM6 in time base mode with interrupts,
-- start ADC1,
+- start PWM generation for TIM1, channel 3 for **TIMER3** connector,
+- start TIM6 in time base mode, no interrupts,
+- start ADC1 without interrupts,
 - create a mutex,
 - create two tasks described above,
 - start FreeRTOS scheduler,
 - implement printf() redirection to serial port,
 - implement **measure** task as a periodic one, period = 1000 [ms],
-- implement **comm** task as a periodic one, period = 1000 [ms].
+- implement **comm** task as a periodic one, period = 1000 [ms],
+- print data via redirected printf(), both measurement and 
+local time in milliseconds.
 
 Below you can see an example of an output:
 ```
-4036, released
-4030, released
-4031, released
-4036, released
-0, pushed
-0, pushed
-4024, released
-4031, released
-4031, released
-0, pushed
-4031, released
-4030, released
+Starting!             
+ADC:    0, time: 1    
+ADC: 1460, time: 1001 
+ADC: 1465, time: 2001 
+ADC: 3040, time: 3001 
+ADC: 2067, time: 4001 
+ADC:  769, time: 5001 
+ADC: 2781, time: 6001 
+ADC: 1967, time: 7001 
+ADC:  731, time: 8001 
+ADC: 2765, time: 9001 
+ADC: 1962, time: 10001
+ADC:  728, time: 11001
+ADC: 2765, time: 12001
+ADC: 1960, time: 13001
+ADC:  730, time: 14001
+ADC: 2766, time: 15001
 ```
+
+Do you see some difference? Maybe some discrepancy or lack of it?
+What have caused it and can you explain why?
 
 ## Subtask 3
 
@@ -116,33 +136,48 @@ Find proper API for handling Event Groups in [FreeRTOSManual].
 
 In this exercise you have to fill out following gaps:
 - include **event_groups.h** header file,
+- reconfigure project so TIM6 can generate interrupts,
+- reconfigure project so ADC1 is triggered not by software but 
+via event from TIM6,
+- start PWM generation for TIM1, channel 3 for **TIMER3** connector,
 - create global variable for holding Event Group,
 - create Event Group,
 - in **measure** task set a flag (bit 0) in Event group,
 - in **comm** task use appropriate API for waiting for 
 an event. **Wait only for 400 [ms]**,
-- make additional appropriate alterations to the code.
+- make additional appropriate alterations to the code,
+- print data via redirected printf(), both measurement and 
+local time in milliseconds.
 
 Below you can see an example of an output:
 ```
-4029, released
-no event
-no event
-4031, released
-no event
-no event
-4031, released
-no event
-no event
-4031, released
-no event
-no event
-0, pushed
-no event
-no event
-4031, released
-no event
-no event
+Starting!            
+ADC: 2069, time: 1   
+no event             
+no event             
+ADC: 2074, time: 1001
+no event             
+no event             
+ADC: 3274, time: 2001
+no event             
+no event             
+ADC: 2159, time: 3001
+no event             
+no event             
+ADC:  802, time: 4001
+no event             
+no event             
+ADC: 2795, time: 5001
+no event             
+no event             
+ADC: 1978, time: 6001
+no event             
+no event             
+ADC:  733, time: 7001
+no event             
+no event             
+ADC: 2767, time: 8001
+no event             
 ```
 
 # Task 2
@@ -421,27 +456,41 @@ time: 15000, measured value: 4035, queue msg 2, error 0
 # Useful functions
 
 Start ADC conversion in interrupt mode.
-- HAL_ADC_Start_IT(&hadc1);
+```C
+HAL_ADC_Start_IT(&hadc1);
+```
 
 Start ADC.
-- HAL_ADC_Start(&hadc1);
+```C
+HAL_ADC_Start(&hadc1);
+```
 
 Start ADC in DMA mode, measurement treated as buffer 
 of length equal to 1 sample.
-- HAL_ADC_Start_DMA(&hadc1, (uint32_t *) &measurement, 1);
+```C
+HAL_ADC_Start_DMA(&hadc1, (uint32_t *) &measurement, 1);
+```
 
 Start TIM in time base mode with interrupts:
-- HAL_TIM_Base_Start_IT(&htim6);
+```C
+HAL_TIM_Base_Start_IT(&htim6);
+```
 
 Callback function called when the ADC measurement is ready.
-- void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc);
+```C
+void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc);
+```
 
 Returns last measured value.
-- measurement = HAL_ADC_GetValue(&hadc1);
+```C
+measurement = HAL_ADC_GetValue(&hadc1);
+```
 
 Get current number of ticks measured since 
 MCU start (in this exercise 1 tick = 1 [ms])
-- HAL_GetTick();
+```C
+HAL_GetTick();
+```
 
 Redirection of printf() function output to serial port 
 can be done with redefinition of _write() function.

@@ -30,7 +30,6 @@
 // --> include all necessary headers for
 // printf() redirection
 // FreeRTOS related headers
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -112,13 +111,13 @@ int main(void) {
 	MX_USART2_UART_Init();
 	MX_ADC1_Init();
 	MX_TIM6_Init();
+	MX_TIM1_Init();
 	/* USER CODE BEGIN 2 */
 
-	// --> start TIM6 in interrupt
+	// --> start TIM1, channel 3 in PWM generation mode, no interrupts
+	// --> start TIM6 in interrupt mode
 	// --> start ADC1
-
 	// --> create a mutex
-
 	// --> create all necessary tasks
 	printf("Starting!\r\n");
 
