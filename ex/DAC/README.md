@@ -72,10 +72,12 @@ of the application,
 
 ## Data visualization
 
+This step is not applicable for remote work.
+
 Use STMStudio software to visualize the measured value.
 Open STMStudio and import variables from executable (*.elf file).
 Start recording session. Remember to disconnect from ST-Link Utility 
-and terminate any open debug session in Atollic TrueSTUDIO.
+and terminate any open debug session in IDE.
 More information about STMStudio can be found in [UM1025].
 
 

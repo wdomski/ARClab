@@ -184,7 +184,7 @@ device number please refer to description of
 specific dev board available through **status server** service.
 
 ```Bash
-minicom --device /dev/ttyAMC0
+minicom --device /dev/ttySomeDevice0
 ```
 
 Default configuration allows to open a session with following 

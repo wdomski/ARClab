@@ -60,7 +60,12 @@ After each conversion the interrupt is being fired.
 The order of channels in ranks defines the order of interrupts. 
 First channel (**ADC3** connector) to be measured is assigned to 
 rank no. 1 and the second one (**ADC4** connector) is 
-assigned to rank no. 2.
+assigned to rank no. 2. After handling IRQ only a single 
+measurement is available (for **ADC3** connector). Next 
+time the IRQ is handled the second measurement for **ADC4** 
+connector is available. Each time the IRQ is being handled 
+a measurement for different channel with order defined in 
+ranks is available.
 
 # Useful functions
 
