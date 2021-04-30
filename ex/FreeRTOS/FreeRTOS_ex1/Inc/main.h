@@ -62,8 +62,6 @@ void Error_Handler(void);
 #define TIM_PERIOD 9999
 #define B1_Pin GPIO_PIN_13
 #define B1_GPIO_Port GPIOC
-#define ADC3_Pin GPIO_PIN_3
-#define ADC3_GPIO_Port GPIOC
 #define USART_TX_Pin GPIO_PIN_2
 #define USART_TX_GPIO_Port GPIOA
 #define USART_RX_Pin GPIO_PIN_3
@@ -72,8 +70,6 @@ void Error_Handler(void);
 #define LD2_GPIO_Port GPIOA
 #define ADC2_Pin GPIO_PIN_7
 #define ADC2_GPIO_Port GPIOA
-#define ADC4_Pin GPIO_PIN_4
-#define ADC4_GPIO_Port GPIOC
 #define TIMER3_Pin GPIO_PIN_10
 #define TIMER3_GPIO_Port GPIOA
 #define TMS_Pin GPIO_PIN_13

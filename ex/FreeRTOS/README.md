@@ -21,10 +21,12 @@ FreeRTOS. The exercise involves:
 
 **This exercise contains three sub-exercises.**
 
-The ADC1 for **ADC2** connector is configured in such a way that the 
-conversion is triggered by TIM6. It is required to 
-start a timer TIM6 (1Hz frequency) in time base mode with interrupts 
-and start ADC1 peripheral (without interrupts or DMA).
+The ADC1 for **ADC2** connector is configured in such a way 
+a software ocnversion launch is required. 
+Further exercises may require changes to the imported project.
+It is required to start a timer TIM6 (1Hz frequency) in time 
+base mode with interrupts and start ADC1 peripheral 
+(without interrupts or DMA).
 
 Moreover, **TIMER2** connector was configured so it 
 generates a square wave with frequency of 1/3Hz ~= 0.33Hz.
@@ -189,14 +191,6 @@ FreeRTOS. The exercise involves:
 - starting FreeRTOS scheduler, 
 - communication between tasks using mutexes,
 - communication using queues in different modes.
-
-You have to connect two pins with a wire. Pin PA0 (analog input) 
-and PC13 (blue button). Connect those two ports 
-while the dev board is not connected to power!
-Use the leaflet given out during classes to identify the 
-MCU pins.
-Before proceeding further inform teacher about the connection 
-and ask for permission to proceed further.
 
 **This exercise contains three subexercises.**
 
