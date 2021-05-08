@@ -6,7 +6,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; Copyright (c) 2019 STMicroelectronics.
+  * <h2><center>&copy; Copyright (c) 2021 STMicroelectronics.
   * All rights reserved.</center></h2>
   *
   * This software component is licensed by ST under BSD 3-Clause license,
@@ -31,14 +31,14 @@ void MX_DAC1_Init(void)
 {
   DAC_ChannelConfTypeDef sConfig = {0};
 
-  /** DAC Initialization 
+  /** DAC Initialization
   */
   hdac1.Instance = DAC1;
   if (HAL_DAC_Init(&hdac1) != HAL_OK)
   {
     Error_Handler();
   }
-  /** DAC channel OUT1 config 
+  /** DAC channel OUT1 config
   */
   sConfig.DAC_SampleAndHold = DAC_SAMPLEANDHOLD_DISABLE;
   sConfig.DAC_Trigger = DAC_TRIGGER_NONE;
@@ -63,15 +63,15 @@ void HAL_DAC_MspInit(DAC_HandleTypeDef* dacHandle)
   /* USER CODE END DAC1_MspInit 0 */
     /* DAC1 clock enable */
     __HAL_RCC_DAC1_CLK_ENABLE();
-  
+
     __HAL_RCC_GPIOA_CLK_ENABLE();
-    /**DAC1 GPIO Configuration    
-    PA4     ------> DAC1_OUT1 
+    /**DAC1 GPIO Configuration
+    PA4     ------> DAC1_OUT1
     */
-    GPIO_InitStruct.Pin = PID_OUT_Pin;
+    GPIO_InitStruct.Pin = DAC1_Pin;
     GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
-    HAL_GPIO_Init(PID_OUT_GPIO_Port, &GPIO_InitStruct);
+    HAL_GPIO_Init(DAC1_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN DAC1_MspInit 1 */
 
@@ -89,17 +89,17 @@ void HAL_DAC_MspDeInit(DAC_HandleTypeDef* dacHandle)
   /* USER CODE END DAC1_MspDeInit 0 */
     /* Peripheral clock disable */
     __HAL_RCC_DAC1_CLK_DISABLE();
-  
-    /**DAC1 GPIO Configuration    
-    PA4     ------> DAC1_OUT1 
+
+    /**DAC1 GPIO Configuration
+    PA4     ------> DAC1_OUT1
     */
-    HAL_GPIO_DeInit(PID_OUT_GPIO_Port, PID_OUT_Pin);
+    HAL_GPIO_DeInit(DAC1_GPIO_Port, DAC1_Pin);
 
   /* USER CODE BEGIN DAC1_MspDeInit 1 */
 
   /* USER CODE END DAC1_MspDeInit 1 */
   }
-} 
+}
 
 /* USER CODE BEGIN 1 */
 

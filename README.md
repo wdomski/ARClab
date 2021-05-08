@@ -21,11 +21,16 @@ exercises involve GPIO manipulation using a button to read
 data from digital input, and a LED to write digital output.
 
 - **ADC** contains exercises related to the Analog 
-Digital Converter peripheral. Later exercise also 
-involve Digital Analog Converter (DAC) and 
-FreeRTOS exercises.
+Digital Converter peripheral. 
+
+- **DAC** contains exercises related to the Digital Analog 
+Converter (DAC).
 
 - **TIM** exercises related to counters.
+
+- **FreeRTOS** contains exercises related to 
+FreeRTOS where tasks, mutexes, event groups and queues 
+are being used.
 
 - **PID** implementation of PID regulator for FreeRTOS.
 
@@ -63,23 +68,32 @@ Exercise from **DAC**, task 1.
 
 ## Laboratory 5
 
-Introduction to FreeRTOS. Basic concepts, task 
-and task synchronization with mutexes and 
-Event Groups.
+Introduction to FreeRTOS. Basic concepts, creation of tasks 
+and task synchronization. Usgae of mutexes to synchronize 
+data between tasks. Also Event Groups are being used to 
+send a notification about events.
 
-Exercises from **ADC**, task 2 (subtask 1, 2 & 3).
+Exercises from **FreeRTOS**, task 1 (all subtasks).
 
 ## Laboratory 6
 
 Introduction to FreeRTOS. Task synchronization using 
-mutexes and queues.
+mutexes and queues. Queues are handled in two ways. 
+First usage of queues is based on storing 
+data in a queue with limited number of samples. 
+A queue is being used as a FIFO queue.
+Second usage is based on mailbox where a queue 
+can only hold a single sample. This behaviour is 
+useful for broadcasting current state to multiple number 
+of tasks.
 
-Exercises from **ADC**, task 3 (subtask 1, 2 & 3).
+Exercises from **FreeRTOS**, task 2 (all subtasks).
 
 ## Laboratory 7
 
 Implementation of a PID controller for a DC motor simulator 
-using FreeRTOS.
+using FreeRTOS. As a DC motor simulator a low-pass filter 
+build from resistor and compensator is being used.
 
 Exercises from **PID**, task 1.
 
@@ -123,11 +137,11 @@ There are three servers available
 which are run on Raspberry Pi. SSH ports to each 
 server were collected in a table below.
 
-|Server|Primary port number|Secondary port number|
+|Server|Primary port number|Secondary port number|Debug service|Status server|Video streaming|
 |-|-|-|
-|aries           | 2201      | 2301                 |
-|taurus          | 2202      | 2302                 |
-|eridanus        | 2203      | 2303                 |
+|aries           | 2201      | 2301                 |x|x|x|
+|taurus          | 2202      | 2302                 |x|x| |
+|eridanus        | 2203      | 2303                 |x|x|x|
 
 If server at primary SSH port number is not reachable 
 please use secondary port number.
@@ -184,7 +198,7 @@ device number please refer to description of
 specific dev board available through **status server** service.
 
 ```Bash
-minicom --device /dev/ttyAMC0
+minicom --device /dev/ttySomeDevice0
 ```
 
 Default configuration allows to open a session with following 

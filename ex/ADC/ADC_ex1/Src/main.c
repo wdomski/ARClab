@@ -119,10 +119,6 @@ int main(void) {
 			break;
 		}
 		case ADC_Ready: {
-			// use
-			// LL_ADC_REG_SetSequencerRanks(adc, rank, channel);
-			// before starting a new conversion
-
 			break;
 		}
 		}

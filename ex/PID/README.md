@@ -11,7 +11,7 @@ will only flash the MCU without entering debug mode.
 
 # Task 1
 
-Import **PID_ex1** project into Atollic TrueSTUDIO.
+Import **PID_ex1** project into IDE.
 The aim of this exercise is to practice acquired FreeRTOS skills 
 and implement PID controller. The exercise involves:
 - decomposition of system into separate FreeRTOS,
@@ -26,26 +26,15 @@ and [FreeRTOSManual].
 
 This task comes with a additional board -- a DC motor simulator. 
 The DC motor simulator is a low pass filter which 
-mimics a real DC motor. Before proceeding further 
-calculate the frequency for which the filter will attenuate to 
-half its original power. This will allow to select 
-proper values for PID controller. Each board has necessary 
-parameters written at its top.
-
-You have to connect the DC motor with the dev board. 
-
-|DC motor simulator|Nucleo board|Description    |
+mimics a real DC motor. 
+|DC motor simulator|Connector   |MCU description|
 |--|--|--|
 |GND               |GND         |Ground         |
-|IN                |PA4         |MCU DAC output |
-|OUT               |PA0         |MCU ADC input  |
+|IN                |**DAC1**    |MCU DAC output |
+|OUT               |**ADC1**    |MCU ADC input  |
 
-Connect DC motor simulator  
-while the dev board is disconnected from power!
-Use the leaflet given out during classes to identify the 
-MCU pins.
-Before proceeding further inform teacher about the connection 
-and ask for permission to proceed further.
+Refer to [board schematic](https://github.com/wdomski/ARClab/blob/develop/boards/NUCLEO64-Board.pdf) 
+for connection diagram.
 
 ## MCU configuration
 
@@ -54,9 +43,6 @@ conversion is triggered by software. The conversion can be started
 in interrupt mode (all necessary interrupts are already enabled).
 
 The DAC1 peripheral is also configured.
-
-Also interrupts from EXTI are enabled to facilitate the 
-implementation of the user interface (switch button).
 
 ## PID
 
@@ -93,14 +79,14 @@ error from previous iteration.
 The *Ki* and *Kd* should be scaled with time -- which 
 is the period with which the control loop operates.
 
-Implement PID controller in pid.c and in corresponding 
-pid.h header file.
+Implement PID controller in *pid.c* and in corresponding 
+*pid.h* header file.
 
 More about PID controllers can be read in [PID].
 
 ## Task 1
 
-This exercise's goal is to implement a PID controller for 
+This exercise goal is to implement a PID controller for 
 a DC motor. Instead of a real motor a DC motor simulator is 
 used which is a simple RC circuit.
 
@@ -109,14 +95,18 @@ This task should be implemented with four FreeRTOS tasks:
 using ADC. The measured value is sent to **control** task.
 - **user** -- a task which implements the user interface. The 
 user should be able to change desired value in range of 
-[0,4000] with step 400 (see example of an output). 
+[0,4000] with step 500 (see example of an output). 
 The task sends the desired value to **control** thread.
+User can input following values '0', '1', ..., '8' where
+'0' is translated to 0 desired value while 8 is translated 
+to 4000 desired value. Other values entered by the user 
+via serial port should be ignored.
 - **control** -- a task which uses a PID controller. Based on the 
 measured value (**mv**) and the desired value (**dv**) calculates 
 the control signal (**cs**). This task directly 
 controls DAC output with control signal. 12-bit 
 DAC resolution can be used instead of 8-bit.
-- **communication** -- a task which sends via printf 
+- **communication** -- a task which sends via *printf()*
 information about the measured value, the desired value 
 and the control signal.
 
@@ -134,102 +124,113 @@ The FreeRTOS time grain is set to 1 ms.
 The synchronization mechanism for tasks can be freely chosen. 
 It can involve mutexes, queues and/or event groups.
 
-Also add visualization of:
-- the desired value,
-- the measured value,
-- the control signal,
-- the error between the desired value and the measured value.
-
 Following items should be present in the finished exercise:
+- initialization of all peripherals,
+- serial port configuration,
 - proper implementation of PID controller,
 - proper implementation of all four tasks,
 - proper implementation of synchronization between tasks,
-- tunned PID controller for the DC motor simulation,
-- calculate frequency for RC circuit (DC motor simulator),
-- visualization of all necessary signals.
+- tuned PID controller for the DC motor simulation.
 
 Below you can see an example of an output:
 ```
 Starting!
-mv:0,dv:1000,cs:4095
-mv:894,dv:1000,cs:1043
-mv:944,dv:1000,cs:1067
-mv:968,dv:1000,cs:1090
-mv:984,dv:1000,cs:1079
-mv:996,dv:1000,cs:1048
-mv:993,dv:1000,cs:1086
-mv:996,dv:1000,cs:1079
-mv:999,dv:1000,cs:1067
-mv:1000,dv:1000,cs:1062
-mv:999,dv:1000,cs:1071
-mv:998,dv:1000,cs:1076
-mv:1221,dv:1500,cs:3053
-mv:1503,dv:1500,cs:1623
-mv:1506,dv:1500,cs:1575
-mv:1705,dv:2000,cs:3684
-mv:2006,dv:2000,cs:2135
-mv:2010,dv:2000,cs:2067
-mv:2346,dv:2500,cs:3548
-mv:2518,dv:2500,cs:2601
-mv:2634,dv:3000,cs:4095
-mv:3032,dv:3000,cs:3189
-mv:3034,dv:3000,cs:3037
-mv:3345,dv:3500,cs:4095
-mv:3557,dv:3500,cs:3677
-mv:3582,dv:4000,cs:4095
-mv:3747,dv:4000,cs:4095
-mv:3843,dv:4000,cs:4095
-mv:3898,dv:4000,cs:4095
-mv:3931,dv:4000,cs:4095
-mv:2362,dv:0,cs:0
-mv:1399,dv:0,cs:0
-mv:830,dv:0,cs:0
-mv:496,dv:0,cs:0
-mv:292,dv:0,cs:0
-mv:172,dv:0,cs:0
-mv:103,dv:500,cs:0
-mv:178,dv:500,cs:584
-mv:554,dv:1000,cs:2593
-mv:920,dv:1000,cs:1141
-mv:1186,dv:1500,cs:3072
-mv:1486,dv:1500,cs:1631
-mv:1498,dv:1500,cs:1577
-mv:1502,dv:1500,cs:1554
-mv:1501,dv:1500,cs:1560
-mv:1503,dv:1500,cs:1547
-mv:1497,dv:1500,cs:1583
+mv:    0, dv: 1000, cs: 4095
+mv:  938, dv: 1000, cs: 1197
+mv:  983, dv: 1000, cs: 1064
+mv:  991, dv: 1000, cs: 1070
+mv:  996, dv: 1000, cs: 1064
+mv:  999, dv: 1000, cs: 1057
+mv:  999, dv: 1000, cs: 1063
+mv: 1000, dv: 1000, cs: 1059
+mv: 1726, dv: 4000, cs: 4095
+mv: 2600, dv: 4000, cs: 4095
+mv: 3136, dv: 4000, cs: 4095
+mv: 3471, dv: 4000, cs: 4095
+mv: 3678, dv: 4000, cs: 4095
+mv: 3805, dv: 4000, cs: 4095
+mv: 3885, dv: 4000, cs: 4095
+mv: 2423, dv:    0, cs:    0
+mv: 1493, dv:    0, cs:    0
+mv:  921, dv:    0, cs:    0
+mv:  566, dv:    0, cs:    0
+mv:  351, dv:    0, cs:    0
+mv:  215, dv:    0, cs:    0
+mv:  474, dv: 1000, cs: 1217
+mv:  735, dv: 1000, cs: 1176
+mv:  870, dv: 1000, cs: 1121
+mv:  937, dv: 1000, cs: 1087
+mv:  581, dv:  500, cs:    0
+mv:  400, dv:  500, cs:  453
+mv:  435, dv:  500, cs:  583
+mv:  468, dv:  500, cs:  571
+mv:  484, dv:  500, cs:  568
+mv:  408, dv:    0, cs:    0
+mv:  246, dv:    0, cs:    0
+mv:  147, dv:    0, cs:    0
+mv:   84, dv:    0, cs:    0
+mv:   48, dv:    0, cs:    0
+mv:   23, dv:    0, cs:    0
+mv:   10, dv:    0, cs:    0
+mv:    0, dv:    0, cs:    0
+mv:    0, dv:    0, cs:    0
+mv:    0, dv:    0, cs:    0
 ```
 
 # Useful functions
 
 Start ADC conversion in interrupt mode.
-- HAL_ADC_Start_IT(&hadc1);
+```C
+HAL_ADC_Start_IT();
+```
 
 Start ADC.
-- HAL_ADC_Start(&hadc1);
+```C
+HAL_ADC_Start();
+```
 
 Start ADC in DMA mode, measurement treated as buffer 
 of length equal to 1 sample.
-- HAL_ADC_Start_DMA(&hadc1, (uint32_t *) &measurement, 1);
+```C
+HAL_ADC_Start_DMA();
+```
 
 Start TIM in time base mode with interrupts:
-- HAL_TIM_Base_Start_IT(&htim6);
+```C
+HAL_TIM_Base_Start_IT(&htim6);
+```
 
 Callback function called when the ADC measurement is ready.
-- void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc);
+```C
+HAL_ADC_ConvCpltCallback();
+```
 
 Returns last measured value.
-- measurement = HAL_ADC_GetValue(&hadc1);
+```C
+HAL_ADC_GetValue();
+```
+
+Enable reception on UART in interrupt mode.
+```C
+HAL_UART_Receive_IT();
+```
+
+Callback function called when data was received by UART.
+```C
+HAL_UART_RxCpltCallback();
+```
 
 Get current number of ticks measured since 
 MCU start (in this exercise 1 tick = 1 [ms])
-- HAL_GetTick();
+```C
+HAL_GetTick();
+```
 
-Redirection of printf() function output to serial port 
-can be done with redefinition of _write() function.
+Redirection of *printf()* function output to serial port 
+can be done with redefinition of *_write()* function.
 Also include **stdio.h**.
 
-```
+```C
 int _write(int file, char *ptr, int len) {
 	HAL_UART_Transmit(&huart2, (uint8_t *) ptr, len, 50);
 	return len;
@@ -241,53 +242,79 @@ int _write(int file, char *ptr, int len) {
 ### Mutexes
 
 Create a mutex. This function returns a mutex:
-- xSemaphoreCreateMutex();
+```C
+xSemaphoreCreateMutex();
+```
 
 Take (lock) mutex:
-- xSemaphoreTake();
+```C
+xSemaphoreTake();
+```
 
 Give (unlock) mutex:
-- xSemaphoreGive();
+```C
+xSemaphoreGive();
+```
 
 ### Event Groups
 
 Create an Event Group:
-- xEventGroupCreate();
+```C
+xEventGroupCreate();
+```
 
 Set bits in an Event Group:
-- xEventGroupSetBits();
+```C
+xEventGroupSetBits();
+```
 
 Wait for bits to be set:
-- xEventGroupWaitBits();
+```C
+xEventGroupWaitBits();
+```
 
 ### Queues
 
 Create a queue:
-- xQueueCreate(numberOfItems, sizeOfItem);
+```C
+xQueueCreate(numberOfItems, sizeOfItem);
+```
 
 Check how meny items is currently in queue:
-- uxQueueMessagesWaiting();
+```C
+uxQueueMessagesWaiting();
+```
 
 Receive an item from queue:
-- xQueueReceive();
+```C
+xQueueReceive();
+```
 
 Send item to queue:
-- xQueueSendToBack();
+```C
+xQueueSendToBack();
+```
 
 Check the item without taking it out from queue:
-- xQueuePeek();
+```C
+xQueuePeek();
+```
 
 ### Task related
 
 Create a task **example** with  **exampleTask** function which 
 implements the task:
-- xTaskCreate(exampleTask, "example", configMINIMAL_STACK_SIZE * 4, NULL, 3, NULL);
+```C
+xTaskCreate(exampleTask, "example", configMINIMAL_STACK_SIZE * 4, NULL, 3, NULL);
+```
 
 Start scheduler:
-- vTaskStartScheduler();
+```C
+vTaskStartScheduler();
+```
 
 General look of a task:
-```
+```C
 void exampleTask(void * args) {
 
 	for (;;) {
@@ -297,7 +324,7 @@ void exampleTask(void * args) {
 ```
 
 General look of a periodic task with period of 100 [ms]:
-```
+```C
 void exampleTask(void * args) {
 	TickType_t xLastWakeTime;
 	xLastWakeTime = xTaskGetTickCount();

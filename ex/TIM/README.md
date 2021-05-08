@@ -25,6 +25,7 @@ In this task you have to fill out following gaps:
 - update the PWM duty signal every time user sends data.
 
 User can send
+
 |Value|PWM duty|
 |-|-|
 |0| 0   %|
@@ -81,14 +82,6 @@ this can be done in Callback function,
 - implement callback from UART to get user input,
 
 - inform user about time since last press event.
-
-You have to connect two pins with a wire. Pin PA0 (timer input 
-capture) and PC13 (blue button). Connect those two ports 
-while the dev board is not connected to power!
-Use the leaflet given out during classes to identify the 
-MCU pins.
-Before proceeding further inform teacher about the connection 
-and ask for permission to proceed further.
 
 During the implementation use provided variables: **flag** and **time**.
 
