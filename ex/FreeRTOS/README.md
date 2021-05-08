@@ -186,7 +186,7 @@ no event
 
 Import **FreeRTOS_ex2** project into IDE.
 The aim of this exercise is to show how to implement tasks in 
-FreeRTOS. The exercise involves:
+FreeRTOS and queues. The exercise involves:
 - periodic task creation,
 - starting FreeRTOS scheduler, 
 - communication between tasks using mutexes,
@@ -194,22 +194,24 @@ FreeRTOS. The exercise involves:
 
 **This exercise contains three subexercises.**
 
-The ADC1 is configured in such a way that the 
+The ADC1 should be configured in such a way that the 
 conversion is triggered by TIM6. It is required to 
-start a timer TIM6 in time base mode with interrupts 
+start a timer TIM6 in time base mode with (or without 
+depending on task requirements) interrupts 
 and start ADC1 peripheral in DMA mode. This configuration 
 allows for completely CPU-free periodic measurement of 
 analog signal.
 
 Additional changes to the project are required:
-- enable interrupts on TIM6,
+- enable interrupts on TIM6 (if necessary),
 - select trigger event as Update Event for TIM6,
 - select trigger source for ADC1,
 - configure DMA for ADC1 in circular mode,
+- select appropriate word length for DMA,
 - enable DMA transfers on ADC completed conversion.
 
 It is required to start a timer TIM6 (1Hz frequency) in time 
-base mode with interrupts and start ADC1 peripheral 
+base mode without interrupts and start ADC1 peripheral 
 (without interrupts or DMA).
 
 Moreover, **TIMER3** connector was configured so it 
@@ -231,26 +233,30 @@ and [FreeRTOSManual].
 In this exercise you have to fill out following gaps:
 - include all necessary headers **stdio.h**,
 - start PWM generation for TIM1, channel 3 for **TIMER3** connector,
-- start TIM6 in time base mode with interrupts,
+- start TIM6 in time base mode without interrupts,
 - start ADC1 in DMA mode,
-- write code that will prints measured data periodically, 
-period should be equal to 1000 [ms].
+- write code that will print measured data periodically, 
+period should be equal to 1000 [ms],
+- do not use interrupts from timer, just a software delay.
 
 **In this exercise do not implement FreeRTOS tasks.**
 
 Below you can see an example of an output:
 ```
-Measured 4029
-Measured 4035
-Measured 4031
-Measured 4031
-Measured 0
-Measured 0
-Measured 4031
-Measured 0
-Measured 0
-Measured 4029
-Measured 4029
+Starting!                           
+Measured value:    0, time:        1
+Measured value: 3558, time:     1005
+Measured value: 2258, time:     2009
+Measured value:  825, time:     3013
+Measured value: 2823, time:     4017
+Measured value: 1978, time:     5021
+Measured value:  717, time:     6025
+Measured value: 2780, time:     7029
+Measured value: 1961, time:     8033
+Measured value:  710, time:     9037
+Measured value: 2778, time:    10041
+Measured value: 1960, time:    11045
+Measured value:  708, time:    12049
 ```
 
 ## Subtask 2
@@ -277,6 +283,7 @@ quickly.
 In this exercise you have to fill out following gaps:
 - include all necessary headers **stdio.h**, **FreeRTOS.h**,
 **task.h**, **semphr.h**, **queue.h** (in this order),
+- start PWM generation for TIM1, channel 3 for **TIMER3** connector,
 - start TIM6 in time base mode with interrupts,
 - start ADC1 in DMA mode,
 - create a mutex to share a **queueError** variable between tasks,
@@ -286,7 +293,7 @@ In this exercise you have to fill out following gaps:
 - implement printf() redirection to serial port,
 - implement **measure** task as a periodic one,
 - implement **comm** task as a periodic one,
-- implement *proper* communication between **measure** and **comm** 
+- implement proper communication between **measure** and **comm** 
 using created mutex and queue.
 
 Three values should be printed via **comm** task:
@@ -295,7 +302,7 @@ Three values should be printed via **comm** task:
 - queue size,
 - queueError (flag).
 
-Flag can be assigned with four values (implement as 
+Flag (error) can be assigned with four values (implement as 
 enumeration type QueueStatus):
 - QueueOK (0) when a item was successfully sent to queue,
 - QueueWriteProblem (1) when there was a problem during sending 
@@ -310,67 +317,47 @@ information.
 Below you can see an example of an output:
 ```
 Starting!
-time: 0, measured value: 0, queue size 0, error 2
-time: 500, measured value: 0, queue size 2, error 0
-time: 1000, measured value: 0, queue size 3, error 0
-time: 1500, measured value: 0, queue size 3, error 0
-time: 2000, measured value: 0, queue size 4, error 0
-time: 2500, measured value: 4035, queue size 5, error 0
-time: 3000, measured value: 4035, queue size 5, error 0
-time: 3500, measured value: 4035, queue size 6, error 0
-time: 4000, measured value: 4036, queue size 7, error 0
-time: 4500, measured value: 4036, queue size 7, error 0
-time: 5000, measured value: 4036, queue size 8, error 0
-time: 5500, measured value: 4036, queue size 9, error 0
-time: 6000, measured value: 4036, queue size 9, error 0
-time: 6500, measured value: 4036, queue size 10, error 0
-time: 7000, measured value: 4036, queue size 11, error 0
-time: 7500, measured value: 4035, queue size 11, error 0
-time: 8000, measured value: 4035, queue size 12, error 0
-time: 8500, measured value: 4035, queue size 13, error 0
-time: 8600, measured value: 4035, queue size 12, error 0
-time: 8700, measured value: 4035, queue size 11, error 0
-time: 8800, measured value: 4035, queue size 11, error 0
-time: 8900, measured value: 4036, queue size 10, error 0
-time: 9000, measured value: 4036, queue size 9, error 0
-time: 9100, measured value: 4036, queue size 9, error 0
-time: 9200, measured value: 4036, queue size 8, error 0
-time: 9300, measured value: 4035, queue size 7, error 0
-time: 9400, measured value: 4035, queue size 7, error 0
-time: 9500, measured value: 4035, queue size 6, error 0
-time: 9600, measured value: 4035, queue size 5, error 0
-time: 9700, measured value: 4035, queue size 5, error 0
-time: 9800, measured value: 4035, queue size 4, error 0
-time: 9900, measured value: 4037, queue size 3, error 0
-time: 10400, measured value: 4037, queue size 4, error 0
-time: 10900, measured value: 4037, queue size 5, error 0
-time: 11400, measured value: 4037, queue size 5, error 0
-time: 11900, measured value: 4035, queue size 6, error 0
-time: 12400, measured value: 4035, queue size 7, error 0
-time: 12900, measured value: 4035, queue size 7, error 0
-time: 13400, measured value: 4035, queue size 8, error 0
-time: 13900, measured value: 4035, queue size 9, error 0
-time: 14400, measured value: 4035, queue size 9, error 0
-time: 14900, measured value: 4035, queue size 10, error 0
-time: 15400, measured value: 4035, queue size 11, error 0
-time: 15900, measured value: 4035, queue size 11, error 0
-time: 16400, measured value: 4035, queue size 12, error 0
-time: 16900, measured value: 4035, queue size 13, error 0
-time: 17000, measured value: 4035, queue size 12, error 0
-time: 17100, measured value: 4035, queue size 11, error 0
-time: 17200, measured value: 4035, queue size 11, error 0
-time: 17300, measured value: 4035, queue size 10, error 0
-time: 17400, measured value: 4035, queue size 9, error 0
-time: 17500, measured value: 4035, queue size 9, error 0
-time: 17600, measured value: 4035, queue size 8, error 0
-time: 17700, measured value: 4035, queue size 7, error 0
-time: 17800, measured value: 4035, queue size 7, error 0
-time: 17900, measured value: 4035, queue size 6, error 0
-time: 18000, measured value: 4035, queue size 5, error 0
-time: 18100, measured value: 4035, queue size 5, error 0
-time: 18200, measured value: 4035, queue size 4, error 0
-time: 18300, measured value: 4035, queue size 3, error 0
-time: 18800, measured value: 4035, queue size 4, error 0
+time:     0, measured value:    0, queue size  0, error 2
+time:   500, measured value:    0, queue size  2, error 0
+time:  1000, measured value:    0, queue size  3, error 0
+time:  1500, measured value:    0, queue size  3, error 0
+time:  2000, measured value:    0, queue size  4, error 0
+time:  2500, measured value: 3031, queue size  5, error 0
+time:  3000, measured value: 3031, queue size  5, error 0
+time:  3500, measured value: 3031, queue size  6, error 0
+time:  4000, measured value: 2056, queue size  7, error 0
+time:  4500, measured value: 2056, queue size  7, error 0
+time:  5000, measured value: 2056, queue size  8, error 0
+time:  5500, measured value:  745, queue size  9, error 0
+time:  6000, measured value:  745, queue size  9, error 0
+time:  6500, measured value:  745, queue size 10, error 0
+time:  7000, measured value:  745, queue size 11, error 0
+time:  7500, measured value: 2790, queue size 11, error 0
+time:  8000, measured value: 2790, queue size 12, error 0
+time:  8500, measured value: 2790, queue size 13, error 0
+time:  8600, measured value: 1963, queue size 12, error 0
+time:  8700, measured value: 1963, queue size 11, error 0
+time:  8800, measured value: 1963, queue size 11, error 0
+time:  8900, measured value:  711, queue size 10, error 0
+time:  9000, measured value:  711, queue size  9, error 0
+time:  9100, measured value:  711, queue size  9, error 0
+time:  9200, measured value:  711, queue size  8, error 0
+time:  9300, measured value: 2777, queue size  7, error 0
+time:  9400, measured value: 2777, queue size  7, error 0
+time:  9500, measured value: 2777, queue size  6, error 0
+time:  9600, measured value: 1959, queue size  5, error 0
+time:  9700, measured value: 1959, queue size  5, error 0
+time:  9800, measured value: 1959, queue size  4, error 0
+time:  9900, measured value:  708, queue size  3, error 0
+time: 10400, measured value:  708, queue size  4, error 0
+time: 10900, measured value:  708, queue size  5, error 0
+time: 11400, measured value:  708, queue size  5, error 0
+time: 11900, measured value: 2778, queue size  6, error 0
+time: 12400, measured value: 2778, queue size  7, error 0
+time: 12900, measured value: 2778, queue size  7, error 0
+time: 13400, measured value: 1957, queue size  8, error 0
+time: 13900, measured value: 1957, queue size  9, error 0
+time: 14400, measured value: 1957, queue size  9, error 0
 ```
 
 ## Subtask 3
@@ -379,67 +366,55 @@ Subtask 3 is an extension to subtask 1 where FreeRTOS
 capabilities are used.
 
 The aim of this exercise is to implement a queue 
-of size equal to 1 sample of QueueMessages type. 
+of size equal to 1 sample of *queue_data_t* type. 
 This implementation is called mail box where 
 message is broadcasted to the listeners.
+Below a prototype of *queue_data_t* was presented
+```C
+typedef struct {
+	uint16_t measurement;
+	uint32_t counter;
+} queue_data_t;
+```
+Field *measurement* holds measured value while 
+field *counter* holds sequential frame number. 
+With every new measurement the *counter* value 
+should increase by 1.
 
 Two tasks should be created **measure** and **comm**.
-In addition to **measure** and **comm** a callback from 
-ADC completed conversion should be implemented 
-where an **adc_flag** should be set to 
-one and the LED should be toggled.
 
 Task **measure** should be made periodical with period 
-equal to 300 [ms] (not ticks). However, only when 
-there was a completed conversion (**adc_flag == 1**)
-it should send a message through the queue 
-(overwrite it with a new message), either 
-**QueueMsgNewData** or **QueueMsgNewDataChange**. 
-The message should switch to notify listening task 
-of change.
+equal to 1000 [ms] (not ticks). 
+Measured value should be copied to the 
+message of *queue_data_t* type and a new 
+*counter* value should be assigned.
 
-Task **comm** should be also periodical with 
-period equal to 1000 [ms].
+Task **comm** should be also periodical but with 
+period equal to 400 [ms].
 The **comm** task should only peek the value 
-stored in the queue. 
+stored in the queue. If the queue is empty, a appropriate 
+message should be displayed. When new data arrives it should be 
+printed along with time and counter values.
 
 In this exercise you have to fill out following gaps:
 - include all necessary headers **stdio.h**, **FreeRTOS.h**,
 **task.h**, **semphr.h**, **queue.h** (in this order),
+- start PWM generation for TIM1, channel 3 for **TIMER3** connector,
 - start TIM6 in time base mode with interrupts,
 - start ADC1 in DMA mode,
-- implement ADC callback,
-- create a mutex to share a **queueError** variable between tasks,
-- create a queue (1 samples of QueueMessages),
+- create a queue (1 samples of *queue_data_t*),
 - create two tasks described above,
 - start FreeRTOS scheduler,
 - implement printf() redirection to serial port,
-- implement **measure** task as a periodic one, period = 300 [ms],
-- implement **comm** task as a periodic one, period = 1000 [ms],
+- implement **measure** task as a periodic one, period = 1000 [ms],
+- implement **comm** task as a periodic one, period = 400 [ms],
 - implement *proper* communication between **measure** and **comm** 
-using created mutex and queue.
+using created queue.
 
 Three values should be printed via **comm** task:
 - current time expressed in ticks,
 - ADC value,
-- queue message,
-- queueError (flag).
-
-Flag can be assigned with four values (QueueStatus):
-- QueueOK (0) when a item was successfully sent to queue,
-- QueueWriteProblem (1) when there was a problem during sending 
-an item to the queue,
-- QueueEmpty (2) queue was empty,
-- QueueCantRead (3) an item could not be received from 
-the queue.
-
-The queue message type should be assigned with one of three 
-values (implement as enumeration type QueueMessages):
-- QueueMsgNoData (0) there is no data, 
-- QueueMsgNewData (1) new data available, 
-- QueueMsgNewDataChange (2) new data available, same as 
-QueueMsgNewData but allows to discover if there was a 
-new portion of data.
+- message counter.
 
 Identify each state and message of the queue and print corresponding 
 information.
@@ -447,21 +422,31 @@ information.
 Below you can see an example of an output:
 ```
 Starting!
-time: 0, measured value: 0, queue msg 0, error 0
-time: 2000, measured value: 4036, queue msg 1, error 0
-time: 3000, measured value: 4036, queue msg 2, error 0
-time: 4000, measured value: 4036, queue msg 1, error 0
-time: 5000, measured value: 4036, queue msg 2, error 0
-time: 6000, measured value: 0, queue msg 1, error 0
-time: 7000, measured value: 4035, queue msg 2, error 0
-time: 8000, measured value: 4036, queue msg 1, error 0
-time: 9000, measured value: 4036, queue msg 2, error 0
-time: 10000, measured value: 0, queue msg 1, error 0
-time: 11000, measured value: 0, queue msg 2, error 0
-time: 12000, measured value: 4036, queue msg 1, error 0
-time: 13000, measured value: 4035, queue msg 2, error 0
-time: 14000, measured value: 4035, queue msg 1, error 0
-time: 15000, measured value: 4035, queue msg 2, error 0
+Queue empty
+Queue empty
+Queue empty
+time:  1200, measured value: 3503, counter:   1
+No new data
+time:  2000, measured value: 2237, counter:   2
+No new data
+No new data
+time:  3200, measured value:  815, counter:   3
+No new data
+time:  4000, measured value: 2821, counter:   4
+No new data
+No new data
+time:  5200, measured value: 1976, counter:   5
+No new data
+time:  6000, measured value:  716, counter:   6
+No new data
+No new data
+time:  7200, measured value: 2780, counter:   7
+No new data
+time:  8000, measured value: 1961, counter:   8
+No new data
+No new data
+time:  9200, measured value:  710, counter:   9
+No new data
 ```
 
 # Useful functions
@@ -519,53 +504,79 @@ int _write(int file, char *ptr, int len) {
 ### Mutexes
 
 Create a mutex. This function returns a mutex:
-- xSemaphoreCreateMutex();
+```C
+xSemaphoreCreateMutex();
+```
 
 Take (lock) mutex:
-- xSemaphoreTake();
+```C
+xSemaphoreTake();
+```
 
 Give (unlock) mutex:
-- xSemaphoreGive();
+```C
+xSemaphoreGive();
+```
 
 ### Event Groups
 
 Create an Event Group:
-- xEventGroupCreate();
+```C
+xEventGroupCreate();
+```
 
 Set bits in an Event Group:
-- xEventGroupSetBits();
+```C
+xEventGroupSetBits();
+```
 
 Wait for bits to be set:
-- xEventGroupWaitBits();
+```C
+xEventGroupWaitBits();
+```
 
 ### Queues
 
 Create a queue:
-- xQueueCreate(numberOfItems, sizeOfItem);
+```C
+xQueueCreate(numberOfItems, sizeOfItem);
+```
 
 Check how meny items is currently in queue:
-- uxQueueMessagesWaiting();
+```C
+uxQueueMessagesWaiting();
+```
 
 Receive an item from queue:
-- xQueueReceive();
+```C
+xQueueReceive();
+```
 
 Send item to queue:
-- xQueueSendToBack();
+```C
+xQueueSendToBack();
+```
 
 Check the item without taking it out from queue:
-- xQueuePeek();
+```C
+xQueuePeek();
+```
 
 ### Task related
 
 Create a task **example** with  **exampleTask** function which 
 implements the task:
-- xTaskCreate(exampleTask, "example", configMINIMAL_STACK_SIZE * 4, NULL, 3, NULL);
+```C
+xTaskCreate(exampleTask, "example", configMINIMAL_STACK_SIZE * 4, NULL, 3, NULL);
+```
 
 Start scheduler:
-- vTaskStartScheduler();
+```C
+vTaskStartScheduler();
+```
 
 General look of a task:
-```
+```C
 void exampleTask(void * args) {
 
 	for (;;) {
@@ -575,7 +586,7 @@ void exampleTask(void * args) {
 ```
 
 General look of a periodic task with period of 100 [ms]:
-```
+```C
 void exampleTask(void * args) {
 	TickType_t xLastWakeTime;
 	xLastWakeTime = xTaskGetTickCount();

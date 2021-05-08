@@ -139,6 +139,7 @@ int main(void)
   MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 
+	// --> start TIM1 to generate PWM signal on TIMER3 connector
 	// --> start TIM6 in interrupt
 	// --> start ADC1 in DMA mode
 	// --> create a mutex
