@@ -1,21 +1,27 @@
 # Excluded files for Matlab
-
-3RMatlab/modelODEfull.m
-3RMatlab/effectorTrajectoryGenerator3Dfull.m
-3RMatlab/startFull.m
 *.asv
 
-# IDE temporary files and directories
+# Python
+__pycache__
+*.pyc
 
+# IDE temporary files and directories
 Debug
-mainfull*.c
 *.bak 
 mx.scratch
 Backup
 *.bak
 .mxproject
 
+.vscode
+
 # Conversion files
 
 *.log
 .*_org
+
+# Solutions
+*full.m
+*Full.m
+mainfull*.c
+*Full.py

@@ -562,6 +562,11 @@ Check the item without taking it out from queue:
 xQueuePeek();
 ```
 
+Overwrite current item stored inside queue:
+```C
+xQueueOverwrite();
+```
+
 ### Task related
 
 Create a task **example** with  **exampleTask** function which 
