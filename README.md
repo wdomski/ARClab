@@ -40,25 +40,35 @@ are being used.
 
 # Course outline
 
-## Laboratory 1
+## Laboratory -- OSH
 
 OSH training.
 
 Introduction to the laboratory classes.
 
-## Laboratory 2
+## Laboratory -- 3R manipulator in Matlab
 
 Introduction to solving ordinary differential equations 
 with ODE solver in Matlab. 
 
 Exercise **3RMatlab**
 
-## Laboratory 3
+## Laboratory -- Model Predictive Control
+
+Trajectory planning for Unicycle and Ackerman models 
+using MPC. 
+Additionally, round and rectangular obstacles are being 
+considered. Exercise in Python using, numpy, scipy and 
+matplotlib.
+
+Exercise **MPC**
+
+## Laboratory -- GPIO
 
 Introduction to GPIO peripheral in MCUs.
 Exercises from **GPIO** directory, tasks 1, 2 & 3. 
 
-## Laboratory 4
+## Laboratory -- ADC & DAC
 
 Working with timers, ADC and DAC. 
 Concepts of interrupts and callback functions.
@@ -70,16 +80,16 @@ Exercise from **ADC**, task 1.
 
 Exercise from **DAC**, task 1.
 
-## Laboratory 5
+## Laboratory -- mutexes and event groups in FreeRTOS
 
 Introduction to FreeRTOS. Basic concepts, creation of tasks 
-and task synchronization. Usgae of mutexes to synchronize 
+and task synchronization. Usage of mutexes to synchronize 
 data between tasks. Also Event Groups are being used to 
 send a notification about events.
 
 Exercises from **FreeRTOS**, task 1 (all subtasks).
 
-## Laboratory 6
+## Laboratory -- mailbox and FIFO queues in FreeRTOS
 
 Introduction to FreeRTOS. Task synchronization using 
 mutexes and queues. Queues are handled in two ways. 
@@ -93,7 +103,7 @@ of tasks.
 
 Exercises from **FreeRTOS**, task 2 (all subtasks).
 
-## Laboratory 7
+## Laboratory -- PID in FreeRTOS
 
 Implementation of a PID controller for a DC motor simulator 
 using FreeRTOS. As a DC motor simulator a low-pass filter 
