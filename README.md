@@ -16,6 +16,10 @@ The goal of this class it to implement input-output decoupling for
 this object. The simulation is run using ODE solver instead of a 
 Simulink diagram.
 
+- **MPC** contains task about Model Predictive Control.
+MPC algorithm is used for controlling a unicycle to follow a 
+desired trajectory.
+
 - **GPIO** contains two exercises for STM32 MCU. Those 
 exercises involve GPIO manipulation using a button to read 
 data from digital input, and a LED to write digital output.
