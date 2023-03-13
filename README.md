@@ -16,6 +16,11 @@ The goal of this class it to implement input-output decoupling for
 this object. The simulation is run using ODE solver instead of a 
 Simulink diagram.
 
+- **StaticLin** is a set of scripts written in Python for 
+trajectory tracking task executed by unicycle mobile platform.
+The goal is accomplished via static linearization. It is considered 
+both for dynamics and kinematics of the mobile platform.
+
 - **MPC** contains task about Model Predictive Control.
 MPC algorithm is used for controlling a unicycle to follow a 
 desired trajectory.
