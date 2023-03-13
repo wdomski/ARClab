@@ -58,6 +58,18 @@ with ODE solver in Matlab.
 
 Exercise **3RMatlab**
 
+## Laboratory -- Static linearization for unicycle
+
+Introduction to solving ordinary differential equations 
+with SciPy in Python. A unicycle mobile platform is 
+a control object. The objective is to track an 
+admissible trajectory (circle) and inadmissible 
+trajectory square. This trajectory tracking task has to be 
+realized both for dynamics and kinematics models of a unicycle 
+mobile platform.
+
+Exercise **3RMatlab**
+
 ## Laboratory -- Model Predictive Control
 
 Trajectory planning for Unicycle and Ackerman models 
