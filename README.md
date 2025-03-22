@@ -141,6 +141,14 @@ Below a glance on dev boards available through out the course.
 
 ![LEDs off](https://github.com/wdomski/ARClab/blob/develop/images/boards_on.jpg "Dev boards with LEDs turned off")
 
+## RemoteLab
+
+Remote work is possible due to RemoteLab infrastructure. 
+A demonstration video as well as description of RemoteLab 
+capabilities is available at [RemoteLab](https://blog.domski.pl/remotelab-can-now-plot-data-in-real-time/).
+
+**Please watch the video since it will answer most common questions.**
+
 ## Available services
 
 Each server can host multiple number of services 
@@ -155,12 +163,12 @@ Access to a specific dev board is available on port number
 dev board. It delivers a web interface though which 
 a board can be *restarted*, *halted* and *resumed*. 
 Also the **OpenOCD server** for specified board can be 
-restarted. The web interface is available at 8082 port number.
+restarted. The web interface is available at 8000 port number.
 
 - **video streaming server** delivers a real-time visual feedback 
 to all boards used during laboratory class. It can be used 
 to e.g. examine if a LED diode is turned on or not. 
-The server is available via web service at 8081 port number.
+The server is available via web service at 8000 port number.
 
 ## Servers
 
@@ -168,8 +176,8 @@ There are three servers available
 which are run on Raspberry Pi. SSH ports to each 
 server were collected in a table below.
 
-|Server|Primary port number|Secondary port number|Debug service|Status server|Video streaming|
-|-|-|-|
+| Server | Primary port number |Secondary port number | Debug service |Status server | Video streaming |
+|---|---|---|---|---|---|
 |aries           | 2201      | 2301                 |x|x|x|
 |taurus          | 2202      | 2302                 |x|x| |
 |eridanus        | 2203      | 2303                 |x|x|x|
@@ -199,15 +207,14 @@ The schematic is available
 
 For Linux users following command is sufficient
 ```Bash
-ssh LOGIN@DOMAIN -p 2201 -L 3001:localhost:3001 -L 8011:localhost:8081 -L 8012:localhost:8082
+ssh LOGIN@DOMAIN -p 2201 -L 3001:localhost:3001 -L 8000:localhost:8000
 ```
 
 Above will connect to aries (because of 2201 port number) and 
 three tunnels will be created:
 - OpenOCD service will be available for board with *id* = 1 
 because port number is 3000 + *id*,
-- **video streaming** will be available at localhost:8011,
-- **status server** will be available at localhost:8012.
+- **video streaming** and **status server** will be available at localhost:8000.
 
 Please mind the port numbers.
 
@@ -241,6 +248,18 @@ serial communication parameters (115200, 8N1):
 
 In order to close *minicom* **Ctrl+a** followed by **x** 
 has to be entered.
+
+### Easier alternative
+
+It is much easier to use build in serial console via web interface. 
+In order to do so select *Serial* link which will open serial console 
+connected to appropriate development board.
+
+This console also offers real-time plotting of received data. 
+However, data needs to be sent in a specific format.
+
+More details how to work with real-time plotting can be found here:
+[Real-time plotting](https://blog.domski.pl/remotelab-can-now-plot-data-in-real-time/)
 
 # Troubleshooting
 
