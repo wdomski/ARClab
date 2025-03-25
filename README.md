@@ -68,7 +68,7 @@ trajectory square. This trajectory tracking task has to be
 realized both for dynamics and kinematics models of a unicycle 
 mobile platform.
 
-Exercise **3RMatlab**
+Exercise **StaticLin**
 
 ## Laboratory -- Model Predictive Control
 
