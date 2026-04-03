@@ -1,6 +1,22 @@
 This course is prepared by Wojciech Domski.
 All rights reserved.
 
+# File description
+
+- **model.py** - contains `Model` base class which defines the interface for all dynamic models (state, step, number of inputs/outputs)
+- **obstacle.py** - contains `Obstacle` base class which defines the interface for all obstacle types (distance, collision detection, safety margin)
+- **mpc.py** - main exercise file containing `UnicycleModel`, `AckermanModel`, `MassDamperSpringModel`, `Circle`, `Rectangle` obstacle classes, and `MPC` controller with TODO placeholders to be filled by students
+- **run.py** - script to run the MPC exercise; contains `main()` for robot navigation and `main_mds()` for mass-damper-spring trajectory tracking
+- **requirements.txt** - Python dependencies
+
+# Preliminaries 
+
+Install all required packages using *requirements.txt*
+
+```cmd
+pip install -r requirements.txt
+```
+
 # Task 1
 Given provided example in *mpc.py* Python file provide implementation
 for MPC algorithm, implementation of Unicycle model, and 
@@ -159,3 +175,62 @@ Find *AckermanModel* class and fill the gaps.
 ![MPC, Ackerman model, rectangular obstacle](animation_ackerman_rectangle.gif)
 
 Please notice that now only the safety margin is violated.
+
+# Mass-Damper-Spring system
+
+In this task you will use the MPC framework to control a 
+mass-damper-spring (MDS) system and track a desired trajectory.
+
+The MDS system is described by the following equation:
+
+$$mx'' + cx' + kx = u$$
+
+where $m$ is the mass, $c$ is the damping coefficient, 
+$k$ is the spring stiffness, and $u$ is the control input (force).
+
+The state vector is $[x, x']$ (position and velocity).
+The system has a single control input $u$.
+
+Default parameters used in this exercise: $m=2$, $c=3$, $k=4$.
+
+## MDS model
+
+Implement the `MassDamperSpringModel.step()` method in *mpc.py*.
+The state update uses Euler integration:
+
+$$x'' = \frac{u - cx' - kx}{m}$$
+
+$$\text{new state} = \text{state} + [x', x''] \cdot dt$$
+
+## MDS cost function
+
+Implement the `MPC.cost_trajectory()` method in *mpc.py*.
+This cost function is used for trajectory tracking. 
+At each prediction step you need to:
+1. Run the model step with control signals
+2. Evaluate the time at the prediction step
+3. Get the desired position from `self._desired_trajectory(t)` 
+   and calculate the tracking error (difference between 
+   current position `state[0]` and desired position)
+4. Add the squared error to the cost
+
+## Desired trajectory
+
+The desired trajectory is provided as a function `desired_trajectory(t)` 
+in the *run.py* script. By default it is defined as:
+
+$$x_d(t) = 0.1 \sin(0.2 t)$$
+
+You can modify this function to test different trajectories.
+
+## Testing
+
+Inside *run.py* uncomment `main_mds()` and comment out `main()` 
+in the `__main__` block. Run the script:
+
+```cmd
+python run.py
+```
+
+A plot will appear showing the system position vs desired trajectory, 
+velocity, and tracking error.

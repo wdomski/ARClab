@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-from mpc import MPC, UnicycleModel, AckermanModel, Circle, Rectangle
+from mpc import MPC, UnicycleModel, AckermanModel, MassDamperSpringModel, Circle, Rectangle
 
 def main():
     start = np.array([0, 0, 0])
@@ -26,6 +26,22 @@ def main():
     
     print("Plotting")
     mpc.plot(path, goal, dt*1000)
+
+# For Mass-Damper-spring system
+def desired_trajectory(t):
+    return 0.1 * np.sin(0.5 * t)
+
+def main_mds():
+    start = np.array([-0.3, -0.05])  # [x, x']
+    dt = 0.1
+    model = MassDamperSpringModel(start.copy(), dt=dt, m_mass=2, c=3, k=4)
+    mpc = MPC(model, T=5, dt=dt)
+    print("Calculating MDS trajectory")
+    solution, path, stats = mpc.run(start, desired_trajectory=desired_trajectory, maxiter=200)
+    print("Plotting")
+    mpc.plot_mds(path, stats, desired_trajectory=desired_trajectory)
     
 if __name__ == "__main__":
     main()
+    # main_mds()
+
