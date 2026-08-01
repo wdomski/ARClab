@@ -16,10 +16,21 @@ The goal of this class it to implement input-output decoupling for
 this object. The simulation is run using ODE solver instead of a 
 Simulink diagram.
 
+- **3R** is a set of scripts written in Python for 3R rigid manipulator. 
+It is a Python equivalent of **3RMatlab**. The goal is to implement 
+input-output decoupling for this object. The simulation is run using 
+SciPy's ODE solver.
+
 - **StaticLin** is a set of scripts written in Python for 
 trajectory tracking task executed by unicycle mobile platform.
 The goal is accomplished via static linearization. It is considered 
 both for dynamics and kinematics of the mobile platform.
+
+- **DynamicLin** is a set of scripts written in Python for 
+trajectory tracking task executed by unicycle mobile platform.
+The goal is accomplished via dynamic linearisation. Unlike static 
+linearisation, dynamic linearisation allows tracking of orientation 
+but requires the system to be constantly in motion (nonzero velocity).
 
 - **MPC** contains task about Model Predictive Control.
 MPC algorithm is used for controlling a unicycle to follow a 
@@ -56,7 +67,7 @@ Introduction to the laboratory classes.
 Introduction to solving ordinary differential equations 
 with ODE solver in Matlab. 
 
-Exercise **3RMatlab**
+Exercise **3RMatlab** or **3R**
 
 ## Laboratory -- Static linearization for unicycle
 
@@ -149,6 +160,8 @@ capabilities is available at [RemoteLab](https://blog.domski.pl/remotelab-can-no
 
 **Please watch the video since it will answer most common questions.**
 
+Repository holding the code of RemoteLAb is available at [RemoteLab repository](https://github.com/wdomski/remote-lab).
+
 ## Available services
 
 Each server can host multiple number of services 
@@ -181,6 +194,7 @@ server were collected in a table below.
 |aries           | 2201      | 2301                 |x|x|x|
 |taurus          | 2202      | 2302                 |x|x| |
 |eridanus        | 2203      | 2303                 |x|x|x|
+|cetus           | 2204      | 2304                 |x|x|x|
 
 If server at primary SSH port number is not reachable 
 please use secondary port number.
@@ -191,7 +205,9 @@ For remote work following boards are available:
 - Nucleo-L476RG,
 - Nucleo-L452RE,
 - STM32L476G-Disco,
-- STM32F429I-DISC1.
+- STM32F429I-DISC1,
+- Raspberry Pi Pico,
+- Raspberry Pi Pico 2.
 
 Each board has a set of features. In other words, the 
 set of features describes which connectors (depicted 
@@ -199,8 +215,11 @@ in schematic) are available. Status server allows to
 verify which set of features is supported by 
 a particular board.
 
-The schematic is available 
-[here](https://github.com/wdomski/ARClab/blob/wd/boards/NUCLEO64-Board.pdf).
+The schematic for STM32-based boards is available 
+[here](https://github.com/wdomski/remote-lab/blob/master/board-shield/Nucleo64-shield.pdf).
+
+The schematic for Raspberry Pi Pico is available
+[here](https://github.com/wdomski/remote-lab/blob/master/board-shield-pico/board-shield-rpi-pico.pdf).
 
 
 ## SSH connection 
@@ -223,6 +242,9 @@ The tunnelled ports can be set via menu depicted in below
 figure
 
 ![PuTTY configuration](https://github.com/wdomski/ARClab/blob/develop/images/putty.png "PuTTY configuration") 
+
+Due to restrictions related to open access to the RemoteLab server a VPN connection 
+or jump host is required. The details will be provided at the beginning of the course.
 
 ## Serial port
 
