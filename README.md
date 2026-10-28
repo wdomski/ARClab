@@ -36,6 +36,10 @@ but requires the system to be constantly in motion (nonzero velocity).
 MPC algorithm is used for controlling a unicycle to follow a 
 desired trajectory.
 
+- **MPPI** contains three incremental Python tasks for Model Predictive
+Path Integral control of a unicycle: free-space navigation, static circular
+obstacles, and dynamic circular obstacles. It reuses the MPC model and geometry.
+
 - **GPIO** contains two exercises for STM32 MCU. Those 
 exercises involve GPIO manipulation using a button to read 
 data from digital input, and a LED to write digital output.
@@ -90,6 +94,14 @@ considered. Exercise in Python using, numpy, scipy and
 matplotlib.
 
 Exercise **MPC**
+
+## Laboratory -- Model Predictive Path Integral Control
+
+Sampling-based control of a unicycle, followed by static obstacle avoidance
+and prediction of moving obstacles. Three incremental Python tasks with
+student TODO sections and complete reference solutions.
+
+Exercise **[MPPI](ex/MPPI/README.md)**
 
 ## Laboratory -- GPIO
 
